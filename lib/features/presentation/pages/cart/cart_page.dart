@@ -73,6 +73,10 @@ class CartPage extends StatelessWidget {
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) {
                     return ProductCard(
+                      category: "",
+                      image: "",
+                      price: "",
+                      title: '',
                       screenWidth: screenWidth * 0.3,
                       screenHeight: screenHeight * 0.15,
                     );

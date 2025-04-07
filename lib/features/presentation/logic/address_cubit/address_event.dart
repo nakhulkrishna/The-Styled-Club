@@ -1,5 +1,5 @@
 // address_event.dart
-import 'package:clothingstore/features/data/models/user_model.dart';
+import 'package:clothingstore/features/data/models/Users/user_model.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class AddressEvent extends Equatable {

@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:clothingstore/features/presentation/logic/address_cubit/address_bloc.dart';
 import 'package:clothingstore/features/presentation/logic/address_cubit/address_event.dart';
-import 'package:clothingstore/features/presentation/logic/bloc/user_profile_state.dart';
+import 'package:clothingstore/features/presentation/logic/user_profile/user_profile_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,8 +11,8 @@ import 'package:iconsax/iconsax.dart';
 
 import 'package:clothingstore/core/constants/colors.dart';
 import 'package:clothingstore/features/data/repositories/user_registeration/user_registration.dart';
-import 'package:clothingstore/features/presentation/logic/bloc/user_profile_bloc.dart';
-import 'package:clothingstore/features/presentation/logic/bloc/user_profile_event.dart';
+import 'package:clothingstore/features/presentation/logic/user_profile/user_profile_bloc.dart';
+import 'package:clothingstore/features/presentation/logic/user_profile/user_profile_event.dart';
 import 'package:clothingstore/features/presentation/pages/Orders_Page/orders_page.dart';
 import 'package:clothingstore/features/presentation/pages/profile/pages/addres_List_page.dart';
 import 'package:clothingstore/features/presentation/pages/profile/pages/profile_data_pages.dart';

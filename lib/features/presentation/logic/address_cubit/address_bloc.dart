@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
-import 'package:clothingstore/features/data/models/user_model.dart';
+import 'package:clothingstore/features/data/models/Users/user_model.dart';
 
 import 'package:clothingstore/features/data/repositories/user_registeration/user_registration.dart';
 import 'package:clothingstore/features/presentation/logic/address_cubit/address_event.dart';

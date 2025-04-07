@@ -1,6 +1,10 @@
+import 'package:clothingstore/features/data/abstract/bloc/base_event.dart';
+import 'package:clothingstore/features/data/abstract/bloc/base_state.dart';
+import 'package:clothingstore/features/data/models/products/product_model.dart';
 import 'package:clothingstore/features/presentation/logic/indicators/carousel_indicator_cubit.dart';
 import 'package:clothingstore/features/presentation/logic/indicators/men_minimal_style_dot_indicator.dart';
 import 'package:clothingstore/features/presentation/logic/indicators/men_new_arrivels_dot_indicator.dart';
+import 'package:clothingstore/features/presentation/logic/products/bloc/products_bloc.dart';
 import 'package:clothingstore/features/presentation/pages/home/single_products_screen/single_products_screen.dart';
 
 import 'package:clothingstore/features/presentation/widgets/carousel_slider.dart';
@@ -23,6 +27,8 @@ class MenTabScreen extends StatelessWidget {
   final ScrollController minimalStyleSrollController;
   @override
   Widget build(BuildContext context) {
+    context.read<ProductBloc>().add(FetchItems<ProductModel>());
+
     List<String> categorys = [
       "POLOS",
       "JACKETS & MORE",
@@ -32,7 +38,6 @@ class MenTabScreen extends StatelessWidget {
       "SHIRTS",
       "BOTTOMS",
       "SNEAKERS",
-      
     ];
     int maxCount = 5;
     int totalCount = 10;
@@ -67,17 +72,34 @@ class MenTabScreen extends StatelessWidget {
         SectionHeading(screenHeight: screenHeight, sectionName: "NEW ARRIVELS"),
 
         //*list view products card
-        ListviewProductsCard(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => SingleProductsScreen()),
-            );
+        BlocBuilder<ProductBloc, BaseState<ProductModel>>(
+          builder: (context, state) {
+            if (state is BaseLoading<ProductModel>) {
+              return CircularProgressIndicator();
+            }
+            if (state is BaseLoaded<ProductModel>) {
+              return ListviewProductsCard(
+                products: state.filteredItems,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SingleProductsScreen(),
+                    ),
+                  );
+                },
+
+                screenHeight: screenHeight,
+                totalCount: state.filteredItems.length,
+                scrollController: newArrivelsSrollController,
+                screenWidth: screenWidth,
+              );
+            }
+            if (state is BaseError<ProductModel>) {
+              return Text("Error: ${state.message}");
+            }
+            return SizedBox();
           },
-          screenHeight: screenHeight,
-          totalCount: totalCount,
-          scrollController: newArrivelsSrollController,
-          screenWidth: screenWidth,
         ),
 
         //* products index dot indicator
@@ -98,10 +120,9 @@ class MenTabScreen extends StatelessWidget {
         SectionHeading(screenHeight: screenHeight, sectionName: "CATEGORYS"),
 
         //* grid view card
-        gridviewCard(
+        GridViewCard(
           isNotCategory: true,
           screenHeight: screenHeight,
-          categorys: categorys,
 
           screenWidth: screenWidth,
         ),
@@ -112,6 +133,7 @@ class MenTabScreen extends StatelessWidget {
 
         //* top picks listview
         ListviewProductsCard(
+          products: [],
           onTap: () {
             Navigator.push(
               context,
@@ -133,10 +155,9 @@ class MenTabScreen extends StatelessWidget {
         ),
 
         //* minimal style
-        gridviewCard(
+        GridViewCard(
           scrollController: minimalStyleSrollController,
           screenHeight: screenHeight,
-          categorys: categorys,
 
           screenWidth: screenWidth,
         ),

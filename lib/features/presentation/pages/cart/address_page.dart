@@ -1,12 +1,12 @@
 import 'package:clothingstore/core/constants/colors.dart' show GColors;
 import 'package:clothingstore/core/formatters/formatters.dart';
-import 'package:clothingstore/features/data/models/user_model.dart';
+import 'package:clothingstore/features/data/models/Users/user_model.dart';
 import 'package:clothingstore/features/presentation/logic/address_cubit/address_bloc.dart';
 import 'package:clothingstore/features/presentation/logic/address_cubit/address_event.dart';
 import 'package:clothingstore/features/presentation/logic/address_cubit/address_state.dart';
-import 'package:clothingstore/features/presentation/logic/bloc/user_profile_bloc.dart';
-import 'package:clothingstore/features/presentation/logic/bloc/user_profile_event.dart';
-import 'package:clothingstore/features/presentation/logic/bloc/user_profile_state.dart';
+import 'package:clothingstore/features/presentation/logic/user_profile/user_profile_bloc.dart';
+import 'package:clothingstore/features/presentation/logic/user_profile/user_profile_event.dart';
+import 'package:clothingstore/features/presentation/logic/user_profile/user_profile_state.dart';
 
 import 'package:clothingstore/features/presentation/logic/radio_button/radio_button.dart';
 import 'package:clothingstore/features/presentation/pages/cart/widgets/text_filed.dart';

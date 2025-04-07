@@ -1,4 +1,4 @@
-
+import 'package:clothingstore/core/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -17,7 +17,7 @@ class DiscountBanner extends StatelessWidget {
     return Container(
       width: screenWidth,
       height: screenHeight * 0.035,
-      color: Colors.orange, // Use your GColors.warning here
+      color: GColors.error, // Use your GColors.warning here
       child: Padding(
         padding: EdgeInsets.only(top: screenHeight * 0.0025),
         child: Text(

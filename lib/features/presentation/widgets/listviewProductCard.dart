@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:clothingstore/core/constants/colors.dart';
+import 'package:clothingstore/features/data/models/products/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -12,6 +13,7 @@ class ListviewProductsCard extends StatelessWidget {
     this.scrollController,
     required this.screenWidth,
     required this.onTap,
+    required this.products,
   });
 
   final double screenHeight;
@@ -19,7 +21,7 @@ class ListviewProductsCard extends StatelessWidget {
   final ScrollController? scrollController;
   final double screenWidth;
   final VoidCallback onTap;
-
+  final List<ProductModel> products;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -27,14 +29,20 @@ class ListviewProductsCard extends StatelessWidget {
       child: ListView.builder(
         physics: ScrollPhysics(),
         scrollDirection: Axis.horizontal,
-        itemCount: totalCount,
+        itemCount: products.length,
         controller: scrollController,
         itemBuilder: (context, index) {
+          final product = products[index];
+
           return GestureDetector(
             onTap: onTap,
             child: ProductCard(
               screenWidth: screenWidth * 0.5,
               screenHeight: screenHeight * 0.3,
+              image: product.thumbnail,
+              title: product.title,
+              category: product.categoryid??"",
+              price: product.price.toString(),
             ),
           );
         },
@@ -49,11 +57,19 @@ class ProductCard extends StatelessWidget {
     required this.screenWidth,
     required this.screenHeight,
     this.isWishlist = false,
+    required this.image,
+    required this.title,
+    required this.category,
+    required this.price,
   });
 
   final double screenWidth;
   final double screenHeight;
   final bool isWishlist;
+  final String image;
+  final String title;
+  final String category;
+  final String price;
 
   @override
   Widget build(BuildContext context) {
@@ -74,6 +90,10 @@ class ProductCard extends StatelessWidget {
                 ),
               ),
               height: screenHeight,
+              child:
+                  image.isNotEmpty
+                      ? Image.network(image, fit: BoxFit.cover)
+                      : SizedBox.shrink(),
             ),
 
             isWishlist
@@ -88,21 +108,22 @@ class ProductCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Product 1",
+                            title,
                             style: GoogleFonts.poppins(
+                              fontSize: 10,
                               fontWeight: FontWeight.w500,
                               color: GColors.darkergray,
                             ),
                           ),
                           Text(
-                            "Category",
+                            category,
                             style: GoogleFonts.poppins(
                               fontSize: 10,
                               color: GColors.darkgery,
                             ),
                           ),
                           Text(
-                            "399",
+                            price,
                             style: GoogleFonts.poppins(
                               fontWeight: FontWeight.w500,
                               color: GColors.darkergray,
@@ -150,21 +171,23 @@ class ProductCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Product 1",
+                            maxLines: 1,
+                            title,
                             style: GoogleFonts.poppins(
+                              fontSize: 11,
                               fontWeight: FontWeight.w500,
                               color: GColors.darkergray,
                             ),
                           ),
                           Text(
-                            "Category",
+                            category,
                             style: GoogleFonts.poppins(
                               fontSize: 10,
                               color: GColors.darkgery,
                             ),
                           ),
                           Text(
-                            "399",
+                            price,
                             style: GoogleFonts.poppins(
                               fontWeight: FontWeight.w500,
                               color: GColors.darkergray,
@@ -177,27 +200,8 @@ class ProductCard extends StatelessWidget {
                               color: GColors.darkgery,
                             ),
                           ),
-                          SizedBox(height: screenHeight * 0.01),
-                          // GestureDetector(
-                          //   onTap: () {
-                          //     log("Move to cart");
-                          //   },
-                          //   child: Container(
-                          //     height: screenHeight * 0.08,
-                          //     decoration: BoxDecoration(
-                          //       border: Border(
-                          //         top: BorderSide(color: GColors.accent),
-                          //       ),
-                          //     ),
 
-                          //     child: Center(
-                          //       child: Text(
-                          //         "MOVE TO CART",
-                          //         style: GoogleFonts.poppins(fontSize: 12),
-                          //       ),
-                          //     ),
-                          //   ),
-                          // ),
+                          // SizedBox(height: screenHeight * 0.01),
                         ],
                       ),
                     ),

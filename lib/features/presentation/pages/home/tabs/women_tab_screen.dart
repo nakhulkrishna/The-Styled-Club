@@ -67,6 +67,7 @@ class WomenTabScreen extends StatelessWidget {
 
         //*list view products card
         ListviewProductsCard(
+          products: [],
           onTap: () {
             Navigator.push(
               context,
@@ -97,10 +98,10 @@ class WomenTabScreen extends StatelessWidget {
         SectionHeading(screenHeight: screenHeight, sectionName: "CATEGORYS"),
 
         //* grid view card
-        gridviewCard(
+        GridViewCard(
+
           isNotCategory: true,
           screenHeight: screenHeight,
-          categorys: categorys,
 
           screenWidth: screenWidth,
         ),
@@ -111,6 +112,7 @@ class WomenTabScreen extends StatelessWidget {
 
         //* top picks listview
         ListviewProductsCard(
+          products: [],
           onTap: () {
             Navigator.push(
               context,
@@ -132,10 +134,9 @@ class WomenTabScreen extends StatelessWidget {
         ),
 
         //* minimal style
-        gridviewCard(
+        GridViewCard(
           scrollController: minimalStyleSrollController,
           screenHeight: screenHeight,
-          categorys: categorys,
 
           screenWidth: screenWidth,
         ),
@@ -157,6 +158,7 @@ class WomenTabScreen extends StatelessWidget {
 
         //* top picks listview
         ListviewProductsCard(
+          products: [],
           onTap: () {
             Navigator.push(
               context,

@@ -126,6 +126,11 @@ class SingleProductsScreen extends StatelessWidget {
                           horizontal: screenWidth * 0.01,
                         ),
                         child: ProductCard(
+                          category: "",
+                          image: "",
+                          price: "",
+                          title: "",
+
                           screenWidth: screenWidth * 0.4,
                           screenHeight: screenHeight * 0.25,
                         ),

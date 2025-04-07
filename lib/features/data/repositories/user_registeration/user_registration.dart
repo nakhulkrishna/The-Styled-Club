@@ -1,7 +1,7 @@
 import 'dart:developer';
 
-import 'package:clothingstore/features/data/models/user_model.dart';
-import 'package:clothingstore/features/data/models/user_profile_model.dart';
+import 'package:clothingstore/features/data/models/Users/user_model.dart';
+import 'package:clothingstore/features/authentication/data/model/user_profile_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:logger/logger.dart';

@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:clothingstore/features/data/repositories/user_registeration/user_registration.dart';
-import 'package:clothingstore/features/presentation/logic/bloc/user_profile_event.dart';
-import 'package:clothingstore/features/presentation/logic/bloc/user_profile_state.dart';
+import 'package:clothingstore/features/presentation/logic/user_profile/user_profile_event.dart';
+import 'package:clothingstore/features/presentation/logic/user_profile/user_profile_state.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:logger/logger.dart';
 

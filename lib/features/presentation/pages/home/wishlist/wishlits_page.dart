@@ -24,6 +24,10 @@ class WishlitsPage extends StatelessWidget {
         ),
         itemBuilder: (context, index) {
           return ProductCard(
+            category: "",
+            image: "",
+            price: "",
+            title: "",
             isWishlist: true,
             screenWidth: screenWidth,
             screenHeight: screenHeight * 0.25,

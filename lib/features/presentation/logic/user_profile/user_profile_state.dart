@@ -1,4 +1,4 @@
-import 'package:clothingstore/features/data/models/user_profile_model.dart';
+import 'package:clothingstore/features/authentication/data/model/user_profile_model.dart';
 import 'package:equatable/equatable.dart';
 
 /// Provides a common structure for states, ensuring consistency across the bloc.
