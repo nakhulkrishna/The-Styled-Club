@@ -1,4 +1,5 @@
-import 'package:clothingstore/features/presentation/logic/radio_button/radio_button.dart';
+
+import 'package:clothingstore/core/constants/enums.dart';
 import 'package:intl/intl.dart';
 
 class NFormatters {
@@ -8,7 +9,7 @@ class NFormatters {
         return 'home';
       case AddressType.work:
         return 'work';
-      case AddressType.others:
+      case AddressType.other:
         return 'others';
       default:
         return 'home';

@@ -22,6 +22,8 @@ enum MediaCategory { folders, banners, brands, categories, products, users }
 
 enum OrderStatus { pending, processing, shipped, delivered, cancelled }
 
+enum AddressType { home, work, other }
+
 enum PaymentMethods {
   paypal,
   googlePay,
