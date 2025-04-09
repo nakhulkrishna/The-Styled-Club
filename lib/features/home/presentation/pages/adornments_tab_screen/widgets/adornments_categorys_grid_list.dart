@@ -41,12 +41,7 @@ class AdornmentsCategorysGridList extends StatelessWidget {
                 isNotCategory
                     ? GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => CategoriedProductsList(),
-                          ),
-                        );
+                        
                       },
                       child: Container(
                         decoration: BoxDecoration(
@@ -64,7 +59,7 @@ class AdornmentsCategorysGridList extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => MinimalStyleProductsList(),
+                            builder: (context) => MinimalStyleProductsList( categoryId: "",itemCategory: "",),
                           ),
                         );
                       },

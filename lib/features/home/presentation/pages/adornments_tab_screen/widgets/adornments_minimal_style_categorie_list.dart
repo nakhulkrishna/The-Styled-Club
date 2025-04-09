@@ -40,14 +40,7 @@ class AdornmentsMinimalStyleCategorieList extends StatelessWidget {
             child:
                 isNotCategory
                     ? GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => CategoriedProductsList(),
-                          ),
-                        );
-                      },
+                      onTap: () {},
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.amberAccent,
@@ -64,7 +57,11 @@ class AdornmentsMinimalStyleCategorieList extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => MinimalStyleProductsList(),
+                            builder:
+                                (context) => MinimalStyleProductsList(
+                                  categoryId: "",
+                                  itemCategory: "",
+                                ),
                           ),
                         );
                       },

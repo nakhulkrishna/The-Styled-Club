@@ -1,6 +1,6 @@
 
-import 'package:clothingstore/core/utils/widgets.common/product_card.dart';
-import 'package:clothingstore/features/data/models/products/product_model.dart';
+import 'package:clothingstore/common/widgets/product_card.dart';
+import 'package:clothingstore/features/products/data/models/products_model/product_model.dart';
 import 'package:flutter/material.dart';
 
 class AdornmentsNewArrivelList extends StatelessWidget {
@@ -27,20 +27,20 @@ class AdornmentsNewArrivelList extends StatelessWidget {
       child: ListView.builder(
         physics: ScrollPhysics(),
         scrollDirection: Axis.horizontal,
-        itemCount: products.length,
+        itemCount: 10,
 
         itemBuilder: (context, index) {
-          final product = products[index];
+          
 
           return GestureDetector(
             onTap: onTap,
             child: ProductCard(
               screenWidth: screenWidth * 0.5,
               screenHeight: screenHeight * 0.3,
-              image: product.thumbnail,
-              title: product.title,
-              category: product.categoryid ?? "",
-              price: product.price.toString(),
+              image:"",
+              title: "",
+              brand: "",
+              price: "",
             ),
           );
         },

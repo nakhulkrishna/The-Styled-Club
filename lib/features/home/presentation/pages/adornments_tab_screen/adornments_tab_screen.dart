@@ -1,6 +1,6 @@
-import 'package:clothingstore/core/utils/widgets.common/carousel_slider.dart';
-import 'package:clothingstore/core/utils/widgets.common/discountbanner.dart';
-import 'package:clothingstore/core/utils/widgets.common/dot_indicator.dart';
+import 'package:clothingstore/common/widgets/carousel_slider.dart';
+import 'package:clothingstore/common/widgets/discountbanner.dart';
+import 'package:clothingstore/common/widgets/dot_indicator.dart';
 
 import 'package:clothingstore/features/home/presentation/pages/adornments_tab_screen/widgets/adornaments_styles_list.dart';
 import 'package:clothingstore/features/home/presentation/pages/adornments_tab_screen/widgets/adornments_categorys_grid_list.dart';
@@ -44,19 +44,19 @@ class AdornmentsTabScreen extends StatelessWidget {
         SectionHeading(screenHeight: screenHeight, sectionName: "NEW ARRIVELS"),
 
         //*list view products card
-        AdornmentsNewArrivelList(
-          products: [],
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => SingleProductsScreen()),
-            );
-          },
-          screenHeight: screenHeight,
-          totalCount: totalCount,
+        // AdornmentsNewArrivelList(
 
-          screenWidth: screenWidth,
-        ),
+        //   onTap: () {
+        //     Navigator.push(
+        //       context,
+        //       MaterialPageRoute(builder: (context) => SingleProductsScreen(productModel: ,)),
+        //     );
+        //   },
+        //   screenHeight: screenHeight,
+        //   totalCount: totalCount,
+
+        //   screenWidth: screenWidth,
+        // ),
 
         //* products index dot indicator
         DotIndicator(position: 1, dotCount: maxCount),
@@ -78,19 +78,19 @@ class AdornmentsTabScreen extends StatelessWidget {
         SectionHeading(screenHeight: screenHeight, sectionName: "TOP PICKS"),
 
         //* top picks listview
-        AdornmentsTopPicksList(
-          products: [],
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => SingleProductsScreen()),
-            );
-          },
-          screenHeight: screenHeight,
-          totalCount: totalCount,
+        // AdornmentsTopPicksList(
+        //   products: [],
+        //   onTap: () {
+        //     Navigator.push(
+        //       context,
+        //       MaterialPageRoute(builder: (context) => SingleProductsScreen()),
+        //     );
+        //   },
+        //   screenHeight: screenHeight,
+        //   totalCount: totalCount,
 
-          screenWidth: screenWidth,
-        ),
+        //   screenWidth: screenWidth,
+        // ),
 
         SizedBox(height: screenHeight * 0.02),
 

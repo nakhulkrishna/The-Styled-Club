@@ -1,5 +1,5 @@
 import 'package:clothingstore/core/constants/colors.dart';
-import 'package:clothingstore/features/presentation/logic/indicators/color_and_size_cubit.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -213,165 +213,88 @@ class BottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return isquanity
-        ? BlocProvider(
-          create: (context) => QuantitySelectionCubit(),
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.02),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.02),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(height: screenHeight * .02),
+          Text(
+            isquanity ? 'Please select quantity,' : 'Please select size,',
+            style: GoogleFonts.poppins(fontSize: 14),
+          ),
+          SizedBox(height: screenHeight * .02),
 
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(height: screenHeight * .02),
-                Text(
-                  'Please select quantity,',
-                  style: GoogleFonts.poppins(fontSize: 14),
-                ),
-                SizedBox(height: screenHeight * .02),
-                BlocBuilder<QuantitySelectionCubit, int>(
-                  builder: (context, state) {
-                    return Wrap(
-                      spacing: 10.0,
-                      runSpacing: 10.0,
-                      children: List.generate(12, (index) {
-                        return GestureDetector(
-                          onTap: () {
-                            context.read<QuantitySelectionCubit>().selectSize(
-                              index,
-                            );
-                          },
-                          child: Container(
-                            height: screenHeight * 0.035,
-                            width: screenWidth * 0.12,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(
-                                color:
-                                    state == index ? Colors.red : Colors.black,
-                              ),
-                            ),
-                            child: Center(
-                              child: Text(
-                                "${index + 1}",
-                                style: GoogleFonts.poppins(fontSize: 11),
-                              ),
+          // Static grid for quantity or size
+          Wrap(
+            spacing: 10.0,
+            runSpacing: 10.0,
+            children:
+                isquanity
+                    ? List.generate(12, (index) {
+                      return Container(
+                        height: screenHeight * 0.035,
+                        width: screenWidth * 0.12,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: Colors.black),
+                        ),
+                        child: Center(
+                          child: Text(
+                            "${index + 1}",
+                            style: GoogleFonts.poppins(fontSize: 11),
+                          ),
+                        ),
+                      );
+                    })
+                    : List.generate(
+                      isNotShoes ? shirtSize.length : shoesSize.length,
+                      (index) {
+                        return Container(
+                          height: screenHeight * 0.035,
+                          width: screenWidth * 0.12,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(color: Colors.black),
+                          ),
+                          child: Center(
+                            child: Text(
+                              isNotShoes ? shirtSize[index] : shoesSize[index],
+                              style: GoogleFonts.poppins(fontSize: 11),
                             ),
                           ),
                         );
-                      }),
-                    );
-                  },
-                ),
-                SizedBox(height: screenHeight * .02),
-                SizedBox(
-                  width: screenWidth,
-                  height: screenHeight * .04,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
-                      ),
-                      foregroundColor: GColors.light,
-                      backgroundColor: GColors.error,
+                      },
                     ),
-                    onPressed: () {
-                      // You can close the bottom sheet here or add further actions
-                      Navigator.pop(context);
-                    },
-                    child: Text(
-                      'ADD TO CART',
-                      style: GoogleFonts.poppins(color: GColors.light),
-                    ),
-                  ),
-                ),
-                SizedBox(height: screenHeight * .02),
-              ],
-            ),
           ),
-        )
-        : BlocProvider(
-          create: (context) => SizeSelectionCubit(),
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.02),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
 
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(height: screenHeight * .02),
-                Text(
-                  'Please select size,',
-                  style: GoogleFonts.poppins(fontSize: 14),
+          SizedBox(height: screenHeight * .02),
+
+          // Add to Cart Button
+          SizedBox(
+            width: screenWidth,
+            height: screenHeight * .04,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(5)),
                 ),
-                SizedBox(height: screenHeight * .02),
-                BlocBuilder<SizeSelectionCubit, int>(
-                  builder: (context, state) {
-                    return Wrap(
-                      spacing: 10.0,
-                      runSpacing: 10.0,
-                      children: List.generate(
-                        isNotShoes ? shirtSize.length : shoesSize.length,
-                        (index) {
-                          return GestureDetector(
-                            onTap: () {
-                              context.read<SizeSelectionCubit>().selectSize(
-                                index,
-                              );
-                            },
-                            child: Container(
-                              height: screenHeight * 0.035,
-                              width: screenWidth * 0.12,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                border: Border.all(
-                                  color:
-                                      state == index
-                                          ? Colors.red
-                                          : Colors.black,
-                                ),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  isNotShoes
-                                      ? shirtSize[index]
-                                      : shoesSize[index],
-                                  style: GoogleFonts.poppins(fontSize: 11),
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    );
-                  },
-                ),
-                SizedBox(height: screenHeight * .02),
-                SizedBox(
-                  width: screenWidth,
-                  height: screenHeight * .04,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
-                      ),
-                      foregroundColor: GColors.light,
-                      backgroundColor: GColors.error,
-                    ),
-                    onPressed: () {
-                      // You can close the bottom sheet here or add further actions
-                      Navigator.pop(context);
-                    },
-                    child: Text(
-                      'ADD TO CART',
-                      style: GoogleFonts.poppins(color: GColors.light),
-                    ),
-                  ),
-                ),
-                SizedBox(height: screenHeight * .02),
-              ],
+                foregroundColor: GColors.light,
+                backgroundColor: GColors.error,
+              ),
+              onPressed: () {
+                Navigator.pop(context); // Close the bottom sheet
+              },
+              child: Text(
+                buttonLabel,
+                style: GoogleFonts.poppins(color: GColors.light),
+              ),
             ),
           ),
-        );
+          SizedBox(height: screenHeight * .02),
+        ],
+      ),
+    );
   }
 }

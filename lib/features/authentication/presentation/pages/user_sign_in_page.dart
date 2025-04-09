@@ -1,6 +1,6 @@
 import 'package:clothingstore/core/constants/colors.dart';
 import 'package:clothingstore/core/constants/sizes.dart';
-import 'package:clothingstore/core/utils/custome_text_field.dart';
+import 'package:clothingstore/common/widgets/custome_text_field.dart';
 import 'package:clothingstore/features/authentication/presentation/bloc/auth_event.dart';
 import 'package:clothingstore/features/authentication/presentation/bloc/auth_state.dart';
 import 'package:clothingstore/features/authentication/presentation/bloc/auth_bloc.dart';

@@ -1,8 +1,10 @@
-import 'package:clothingstore/core/utils/widgets.common/carousel_slider.dart';
-import 'package:clothingstore/core/utils/widgets.common/discountbanner.dart';
-import 'package:clothingstore/core/utils/widgets.common/dot_indicator.dart';
+import 'package:clothingstore/common/bloc/carosel_cubit/carousel_cubit.dart';
+import 'package:clothingstore/common/widgets/carousel_slider.dart';
+import 'package:clothingstore/common/widgets/discountbanner.dart';
+import 'package:clothingstore/common/widgets/dot_indicator.dart';
 
 import 'package:clothingstore/features/home/presentation/pages/women_tab_screen/widgets/women_bottom_list.dart';
+import 'package:clothingstore/features/home/presentation/pages/women_tab_screen/widgets/women_carousel_slider.dart';
 import 'package:clothingstore/features/home/presentation/pages/women_tab_screen/widgets/women_categorys_grid_list.dart';
 import 'package:clothingstore/features/home/presentation/pages/women_tab_screen/widgets/women_minimal_style_categorie_list.dart';
 import 'package:clothingstore/features/home/presentation/pages/women_tab_screen/widgets/women_new_arrivel_list.dart';
@@ -11,6 +13,8 @@ import 'package:clothingstore/features/home/presentation/pages/women_tab_screen/
 import 'package:clothingstore/features/home/presentation/widgets/section_heading.dart';
 import 'package:clothingstore/features/products/presentation/pages/single_product/single_product_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class WomenTabScreen extends StatelessWidget {
   const WomenTabScreen({super.key});
@@ -32,13 +36,22 @@ class WomenTabScreen extends StatelessWidget {
         SizedBox(height: screenHeight * 0.002),
 
         //* Carousel slider section
-        CarouselSliderSection(
-          screenHeight: screenHeight,
-          screenWidth: screenWidth,
+        BlocProvider(
+          create: (_) => CarouselCubit(),
+          child: Column(
+            children: [
+              WomenCarouselSlider(
+                screenHeight: screenHeight,
+                screenWidth: screenWidth,
+              ),
+              BlocBuilder<CarouselCubit, int>(
+                builder: (_, state) {
+                  return DotIndicator(position: state.toDouble(), dotCount: 6);
+                },
+              ),
+            ],
+          ),
         ),
-
-        //* dot indicator
-        DotIndicator(position: 1),
 
         SizedBox(height: screenHeight * 0.02),
 
@@ -49,10 +62,10 @@ class WomenTabScreen extends StatelessWidget {
         WomenNewArrivelList(
           products: [],
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => SingleProductsScreen()),
-            );
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(builder: (context) => SingleProductsScreen()),
+            // );
           },
           screenHeight: screenHeight,
           totalCount: totalCount,
@@ -80,20 +93,19 @@ class WomenTabScreen extends StatelessWidget {
         SectionHeading(screenHeight: screenHeight, sectionName: "TOP PICKS"),
 
         //* top picks listview
-        WomenTopPicksList(
-          products: [],
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => SingleProductsScreen()),
-            );
-          },
-          screenHeight: screenHeight,
-          totalCount: totalCount,
+        // WomenTopPicksList(
+        //   products: [],
+        //   onTap: () {
+        //     Navigator.push(
+        //       context,
+        //       MaterialPageRoute(builder: (context) => SingleProductsScreen()),
+        //     );
+        //   },
+        //   screenHeight: screenHeight,
+        //   totalCount: totalCount,
 
-          screenWidth: screenWidth,
-        ),
-
+        //   screenWidth: screenWidth,
+        // ),
         SizedBox(height: screenHeight * 0.02),
 
         //* minimal style section
@@ -116,10 +128,7 @@ class WomenTabScreen extends StatelessWidget {
         WomenBottomList(
           products: [],
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => SingleProductsScreen()),
-            );
+            // context.go('/singleProducts');
           },
           screenHeight: screenHeight,
           totalCount: totalCount,

@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:clothingstore/core/constants/colors.dart';
-import 'package:clothingstore/features/data/models/products/product_model.dart';
+import 'package:clothingstore/features/products/data/models/products_model/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 

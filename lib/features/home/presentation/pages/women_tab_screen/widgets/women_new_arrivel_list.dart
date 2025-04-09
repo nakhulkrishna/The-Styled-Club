@@ -1,6 +1,6 @@
 
-import 'package:clothingstore/core/utils/widgets.common/product_card.dart';
-import 'package:clothingstore/features/data/models/products/product_model.dart';
+import 'package:clothingstore/common/widgets/product_card.dart';
+import 'package:clothingstore/features/products/data/models/products_model/product_model.dart';
 import 'package:flutter/material.dart';
 
 class WomenNewArrivelList extends StatelessWidget {
@@ -39,7 +39,7 @@ class WomenNewArrivelList extends StatelessWidget {
               screenHeight: screenHeight * 0.3,
               image: product.thumbnail,
               title: product.title,
-              category: product.categoryid ?? "",
+              brand: product.brand!.name,
               price: product.price.toString(),
             ),
           );

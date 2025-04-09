@@ -1,5 +1,6 @@
 import 'package:clothingstore/core/constants/colors.dart';
-import 'package:clothingstore/features/cart/address_page.dart';
+
+import 'package:clothingstore/features/profile/presentation/pages/addresPages/pages/address_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 

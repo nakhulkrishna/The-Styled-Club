@@ -1,5 +1,20 @@
-import 'dart:io'; // Platform detection
+// Platform detection
+import 'package:clothingstore/common/bloc/products_size_cubit.dart';
 import 'package:clothingstore/core/router/go_route.dart';
+
+import 'package:clothingstore/features/home/data/datasources/banner/banner_romote_data_source.dart';
+import 'package:clothingstore/features/home/data/repositories/banner/banner_repositories_impl.dart';
+import 'package:clothingstore/features/home/domain/usecases/banner/get_banner_usecases.dart';
+import 'package:clothingstore/features/home/presentation/bloc/banner/banner_cubit.dart';
+import 'package:clothingstore/features/products/data/data_sources/categories_remote_data_sources.dart';
+import 'package:clothingstore/features/products/data/data_sources/product_remote_data_sources.dart';
+import 'package:clothingstore/features/products/data/repositories/categories_repositories_impl.dart';
+import 'package:clothingstore/features/products/data/repositories/products_repositories_impl.dart';
+import 'package:clothingstore/features/products/domain/usecases/categorie_usecases.dart';
+import 'package:clothingstore/features/products/domain/usecases/product_usecases.dart';
+import 'package:clothingstore/features/products/presentation/bloc/categories/categorie_cubit.dart';
+import 'package:clothingstore/features/products/presentation/bloc/product/product_cubit.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -27,9 +42,7 @@ void main() async {
 class CustomScrollBehavior extends ScrollBehavior {
   @override
   ScrollPhysics getScrollPhysics(BuildContext context) {
-    return Platform.isIOS
-        ? const BouncingScrollPhysics()
-        : const ClampingScrollPhysics();
+    return BouncingScrollPhysics().applyTo(ClampingScrollPhysics());
   }
 
   Widget buildViewportChrome(
@@ -64,12 +77,153 @@ class MyApp extends StatelessWidget {
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
+            create: (context) => SizeSelectionCubit(),
+            child: Container(),
+          ),
+          BlocProvider(
+            create: (context) => QuantitySelectionCubit(),
+            child: Container(),
+          ),
+
+          BlocProvider(
             create:
                 (context) => AuthBloc(
                   signInUseCase: context.read<SignInUseCase>(),
                   signUpUseCase: context.read<SignUpUseCase>(),
                 ),
           ),
+          BlocProvider(
+            create:
+                (context) => MenBannerCubit(
+                  GetBannersUseCase(
+                    BannerRepositoriesImpl(
+                      remoteDataSource: BannerRemoteDataSource(
+                        firestore: FirebaseFirestore.instance,
+                      ),
+                    ),
+                  ),
+                ),
+          ),
+          BlocProvider(
+            create:
+                (context) => WomenBannerCubit(
+                  GetBannersUseCase(
+                    BannerRepositoriesImpl(
+                      remoteDataSource: BannerRemoteDataSource(
+                        firestore: FirebaseFirestore.instance,
+                      ),
+                    ),
+                  ),
+                ),
+          ),
+          BlocProvider(
+            create:
+                (context) => AdornmentsBannerCubit(
+                  GetBannersUseCase(
+                    BannerRepositoriesImpl(
+                      remoteDataSource: BannerRemoteDataSource(
+                        firestore: FirebaseFirestore.instance,
+                      ),
+                    ),
+                  ),
+                ),
+          ),
+          BlocProvider(
+            create:
+                (context) => NormalCategorieCubit(
+                  CategorieUsecases(
+                    CategoriesRepositoriesImpl(
+                      categoriesRemoteDataSources: CategoriesRemoteDataSources(
+                        firestore: FirebaseFirestore.instance,
+                      ),
+                    ),
+                  ),
+                ),
+          ),
+          BlocProvider(
+            create:
+                (context) => MinimalStyleCategoriesCubit(
+                  CategorieUsecases(
+                    CategoriesRepositoriesImpl(
+                      categoriesRemoteDataSources: CategoriesRemoteDataSources(
+                        firestore: FirebaseFirestore.instance,
+                      ),
+                    ),
+                  ),
+                ),
+          ),
+          BlocProvider(
+            create:
+                (context) => SharpDressingStyleCubit(
+                  CategorieUsecases(
+                    CategoriesRepositoriesImpl(
+                      categoriesRemoteDataSources: CategoriesRemoteDataSources(
+                        firestore: FirebaseFirestore.instance,
+                      ),
+                    ),
+                  ),
+                ),
+          ),
+          BlocProvider(
+            create:
+                (context) => ProductCubit(
+                  ProductUsecases(
+                    ProductsRepositoriesImpl(
+                      productRemoteDataSources: ProductRemoteDataSources(
+                        firestore: FirebaseFirestore.instance,
+                      ),
+                    ),
+                  ),
+                ),
+          ),
+          BlocProvider(
+            create:
+                (context) => TopPickedCubit(
+                  ProductUsecases(
+                    ProductsRepositoriesImpl(
+                      productRemoteDataSources: ProductRemoteDataSources(
+                        firestore: FirebaseFirestore.instance,
+                      ),
+                    ),
+                  ),
+                ),
+          ),
+          BlocProvider(
+            create:
+                (context) => CategoryBasedCubit(
+                  ProductUsecases(
+                    ProductsRepositoriesImpl(
+                      productRemoteDataSources: ProductRemoteDataSources(
+                        firestore: FirebaseFirestore.instance,
+                      ),
+                    ),
+                  ),
+                ),
+          ),
+          BlocProvider(
+            create:
+                (context) => MinimalCategoryBasedCubit(
+                  ProductUsecases(
+                    ProductsRepositoriesImpl(
+                      productRemoteDataSources: ProductRemoteDataSources(
+                        firestore: FirebaseFirestore.instance,
+                      ),
+                    ),
+                  ),
+                ),
+          ),
+          // BlocProvider(
+          //   create:
+          //       (context) => SharpDressingCategoryBasedCubit(
+          //         ProductUsecases(
+          //           ProductsRepositoriesImpl(
+          //             productRemoteDataSources: ProductRemoteDataSources(
+          //               firestore: FirebaseFirestore.instance,
+          //             ),
+          //           ),
+          //         ),
+          //       ),
+          // ),
         ],
         child: MaterialApp.router(
           debugShowCheckedModeBanner: false,

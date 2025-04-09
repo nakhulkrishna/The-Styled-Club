@@ -1,7 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:clothingstore/features/data/models/products/product_model.dart';
+import 'package:clothingstore/features/products/data/models/products_model/product_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 

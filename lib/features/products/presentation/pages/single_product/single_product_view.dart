@@ -1,36 +1,22 @@
 import 'package:clothingstore/core/constants/colors.dart';
-import 'package:clothingstore/core/utils/widgets.common/product_card.dart';
+import 'package:clothingstore/common/widgets/add_to_cart_button.dart';
+import 'package:clothingstore/common/widgets/delivery_details_section.dart';
+import 'package:clothingstore/common/widgets/product_card.dart';
+import 'package:clothingstore/common/widgets/products_details.dart';
 
-import 'package:clothingstore/features/presentation/widgets/Products_details.dart';
-import 'package:clothingstore/core/utils/widgets.common/add_to_cart_button.dart';
-import 'package:clothingstore/features/presentation/widgets/delivery_Details_Section.dart';
+import 'package:clothingstore/common/widgets/products_image_slider.dart';
 
-import 'package:clothingstore/core/utils/widgets.common/products_image_slider.dart';
+import 'package:clothingstore/features/products/domain/entites/product_entity.dart';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SingleProductsScreen extends StatelessWidget {
-  const SingleProductsScreen({super.key});
+  const SingleProductsScreen({super.key, required this.productModel});
 
+  final ProductEntity productModel;
   @override
   Widget build(BuildContext context) {
-    List<Color> colors = [
-      Colors.black,
-      Colors.red,
-      Colors.blueGrey,
-      Colors.white,
-      Colors.brown,
-    ];
-
-    List<String> backendDataList = [
-      "Upper material is made of PU and TPU that is comfortable, breathable and easy to use",
-      "Sole material is lightweight and durable",
-      "Available in various sizes to suit your fit",
-      "Easy to clean and maintain for long-term use",
-      "Perfect for casual wear and outdoor activities",
-    ];
-
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
     final PageController controller = PageController();
@@ -48,14 +34,13 @@ class SingleProductsScreen extends StatelessWidget {
             ProductImageSection(
               imageScrollController: controller,
               screenHeight: screenHeight,
-              imageUrls: backendDataList,
+              imageUrls: productModel.Image ?? [],
             ),
 
             ProductsDetails(
               screenWidth: screenWidth,
-              backendDataList: backendDataList,
+              productEntity: productModel,
               screenHeight: screenHeight,
-              colors: colors,
             ),
 
             // Divider Section
@@ -67,7 +52,7 @@ class SingleProductsScreen extends StatelessWidget {
             DeliveryDetailsSection(
               screenWidth: screenWidth,
               screenHeight: screenHeight,
-              backendDataList: backendDataList,
+              products: productModel,
             ),
 
             // Horizontal List Section for Recommended Products or Similar Items
@@ -89,7 +74,7 @@ class SingleProductsScreen extends StatelessWidget {
                       horizontal: screenWidth * 0.01,
                     ),
                     child: ProductCard(
-                      category: "",
+                      brand: "",
                       image: "",
                       price: "",
                       title: "",

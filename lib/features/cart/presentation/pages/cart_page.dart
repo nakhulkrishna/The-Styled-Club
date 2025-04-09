@@ -1,7 +1,7 @@
 import 'package:clothingstore/core/constants/colors.dart';
-import 'package:clothingstore/core/utils/widgets.common/discountbanner.dart';
+import 'package:clothingstore/common/widgets/discountbanner.dart';
 
-import 'package:clothingstore/core/utils/widgets.common/product_card.dart';
+import 'package:clothingstore/common/widgets/product_card.dart';
 import 'package:clothingstore/features/cart/presentation/widgets/car_products_card.dart';
 import 'package:clothingstore/features/cart/presentation/widgets/cart_bottom_bar.dart';
 import 'package:clothingstore/features/cart/presentation/widgets/final_price_data.dart';
@@ -75,7 +75,7 @@ class CartPage extends StatelessWidget {
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) {
                     return ProductCard(
-                      category: "",
+                      brand: "",
                       image: "",
                       price: "",
                       title: '',

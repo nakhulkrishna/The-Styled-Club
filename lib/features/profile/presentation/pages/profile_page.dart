@@ -1,5 +1,7 @@
 import 'dart:developer';
 
+import 'package:clothingstore/features/profile/presentation/pages/addresPages/pages/addres_list_page.dart';
+import 'package:clothingstore/features/profile/presentation/widgets/profile_section.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,8 +12,8 @@ import 'package:clothingstore/core/constants/colors.dart';
 import 'package:clothingstore/features/data/repositories/user_registeration/user_registration.dart';
 
 import 'package:clothingstore/features/order/presentation/pages/orders_page.dart';
-import 'package:clothingstore/features/profile/presentation/pages/addres_List_page.dart';
-import 'package:clothingstore/features/profile/presentation/pages/profile_data_pages.dart';
+
+import 'package:clothingstore/features/profile/presentation/pages/profile_add_update/pages/profile_data_pages.dart';
 import 'package:shimmer/shimmer.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -152,73 +154,3 @@ class ProfilePage extends StatelessWidget {
   }
 }
 
-class ProfileSection extends StatelessWidget {
-  final String userName;
-  final String phone;
-  final double screenWidth;
-  final double screenHeight;
-
-  const ProfileSection({
-    required this.userName,
-    required this.phone,
-    required this.screenWidth,
-    required this.screenHeight,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(height: screenHeight * 0.02),
-        CircleAvatar(
-          radius: screenWidth * 0.15,
-          backgroundImage:
-              userName.isNotEmpty
-                  ? AssetImage(
-                    'assets/images/userAvatar.jpg',
-                  ) // Replace with your user image
-                  : AssetImage('assets/images/userAvatar.jpg'),
-          child:
-              userName.isEmpty
-                  ? Shimmer.fromColors(
-                    baseColor: Colors.grey[300]!,
-                    highlightColor: Colors.grey[100]!,
-                    child: Container(
-                      width: screenWidth * 0.3,
-                      height: screenWidth * 0.3,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                  )
-                  : null,
-        ),
-        SizedBox(height: screenHeight * 0.02),
-        userName.isNotEmpty
-            ? Text(userName, style: GoogleFonts.poppins(fontSize: 18))
-            : Shimmer.fromColors(
-              baseColor: Colors.grey[300]!,
-              highlightColor: Colors.grey[100]!,
-              child: Container(
-                width: screenWidth * 0.5,
-                height: screenHeight * 0.03,
-                color: Colors.white,
-              ),
-            ),
-        SizedBox(height: screenHeight * 0.01),
-        phone.isNotEmpty
-            ? Text(phone, style: GoogleFonts.poppins(fontSize: 14))
-            : Shimmer.fromColors(
-              baseColor: Colors.grey[300]!,
-              highlightColor: Colors.grey[100]!,
-              child: Container(
-                width: screenWidth * 0.4,
-                height: screenHeight * 0.03,
-                color: Colors.white,
-              ),
-            ),
-      ],
-    );
-  }
-}

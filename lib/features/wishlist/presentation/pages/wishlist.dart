@@ -1,5 +1,5 @@
 
-import 'package:clothingstore/core/utils/widgets.common/product_card.dart';
+import 'package:clothingstore/common/widgets/product_card.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -25,7 +25,7 @@ class WishlitsPage extends StatelessWidget {
         ),
         itemBuilder: (context, index) {
           return ProductCard(
-            category: "",
+            brand: "",
             image: "",
             price: "",
             title: "",

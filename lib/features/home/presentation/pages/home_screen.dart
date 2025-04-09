@@ -1,4 +1,5 @@
 import 'package:clothingstore/core/constants/colors.dart';
+
 import 'package:clothingstore/features/home/presentation/pages/adornments_tab_screen/adornments_tab_screen.dart';
 import 'package:clothingstore/features/home/presentation/pages/cart_screen/cart_page.dart';
 import 'package:clothingstore/features/home/presentation/pages/men_tab_screen/man_tab_screen.dart';
@@ -61,22 +62,16 @@ class HomeScreen extends StatelessWidget {
           physics: NeverScrollableScrollPhysics(),
           children: [
             SingleChildScrollView(
-              physics: BouncingScrollPhysics().applyTo(ClampingScrollPhysics()),
-              child: MenTabScreen(
-               
-              ),
+              physics:BouncingScrollPhysics().applyTo(ClampingScrollPhysics()),
+              child: MenTabScreen(),
             ),
             SingleChildScrollView(
               physics: BouncingScrollPhysics().applyTo(ClampingScrollPhysics()),
-              child: WomenTabScreen(
-               
-              ),
+              child: WomenTabScreen(),
             ),
             SingleChildScrollView(
               physics: BouncingScrollPhysics().applyTo(ClampingScrollPhysics()),
-              child: AdornmentsTabScreen(
-               
-              ),
+              child: AdornmentsTabScreen(),
             ),
           ],
         ),
