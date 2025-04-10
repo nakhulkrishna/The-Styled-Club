@@ -46,15 +46,13 @@ class MenNewArrivelList extends StatelessWidget {
               itemCount: 10,
 
               itemBuilder: (context, index) {
-                return GestureDetector(
-                  child: ProductCard(
-                    screenWidth: screenWidth * 0.5,
-                    screenHeight: screenHeight * 0.3,
-                    image: "",
-                    title: "",
-                    brand: "",
-                    price: "",
-                  ),
+                return ProductCard(
+                  screenWidth: screenWidth * 0.5,
+                  screenHeight: screenHeight * 0.3,
+                  image: "",
+                  title: "",
+                  brand: "",
+                  price: "",
                 );
               },
             ),

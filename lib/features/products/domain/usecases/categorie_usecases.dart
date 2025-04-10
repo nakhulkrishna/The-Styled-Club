@@ -16,4 +16,16 @@ class CategorieUsecases {
     Future<List<CategoryEntity>> fecthAllSharpDressing() {
     return repository.fecthAllSharpDressingCategories();
   }
+  
+  Future<List<CategoryEntity>> getWomenNormalCategoriesItems() {
+    return repository.getWomenNormalCategories();
+  }
+
+  Future<List<CategoryEntity>> getWomenMinimalCategoriesItems() {
+    return repository.getWomenMinimalStyleCategories();
+  }
+
+  Future<List<CategoryEntity>> getWomenSharpDressing() {
+    return repository.getWomenSharpDressingCategories();
+  }
 }

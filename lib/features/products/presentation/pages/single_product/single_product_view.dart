@@ -25,6 +25,7 @@ class SingleProductsScreen extends StatelessWidget {
       bottomNavigationBar: AddToCartButton(
         screenHeight: screenHeight,
         screenWidth: screenWidth,
+        productId: productModel,
       ),
       body: SingleChildScrollView(
         child: Column(

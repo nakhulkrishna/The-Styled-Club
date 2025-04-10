@@ -1,8 +1,7 @@
-// user_model.dart
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:convert';
 
-class UserModel {
-  final String uid;
+class AddressModel {
+  final String? id; // Optional doc ID
   final String firstName;
   final String lastName;
   final String phone;
@@ -14,8 +13,8 @@ class UserModel {
   final String state;
   final String addressType;
 
-  UserModel({
-    required this.uid,
+  AddressModel({
+    this.id,
     required this.firstName,
     required this.lastName,
     required this.phone,
@@ -28,10 +27,9 @@ class UserModel {
     required this.addressType,
   });
 
-  // Convert a UserModel object to a Map to store in Firestore
   Map<String, dynamic> toMap() {
     return {
-      'uid': uid,
+      'id': id,
       'firstName': firstName,
       'lastName': lastName,
       'phone': phone,
@@ -42,14 +40,12 @@ class UserModel {
       'city': city,
       'state': state,
       'addressType': addressType,
-      'createdAt': FieldValue.serverTimestamp(),
     };
   }
 
-  // Create a UserModel object from a Firestore document snapshot
-  factory UserModel.fromMap(Map<String, dynamic> map) {
-    return UserModel(
-      uid: map['uid'] ?? '',
+  factory AddressModel.fromMap(Map<String, dynamic> map) {
+    return AddressModel(
+      id: map['id'],
       firstName: map['firstName'] ?? '',
       lastName: map['lastName'] ?? '',
       phone: map['phone'] ?? '',
@@ -60,6 +56,39 @@ class UserModel {
       city: map['city'] ?? '',
       state: map['state'] ?? '',
       addressType: map['addressType'] ?? '',
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory AddressModel.fromJson(String source) =>
+      AddressModel.fromMap(json.decode(source));
+
+  AddressModel copyWith({
+    String? id,
+    String? firstName,
+    String? lastName,
+    String? phone,
+    String? pincode,
+    String? flat,
+    String? street,
+    String? landmark,
+    String? city,
+    String? state,
+    String? addressType,
+  }) {
+    return AddressModel(
+      id: id ?? this.id,
+      firstName: firstName ?? this.firstName,
+      lastName: lastName ?? this.lastName,
+      phone: phone ?? this.phone,
+      pincode: pincode ?? this.pincode,
+      flat: flat ?? this.flat,
+      street: street ?? this.street,
+      landmark: landmark ?? this.landmark,
+      city: city ?? this.city,
+      state: state ?? this.state,
+      addressType: addressType ?? this.addressType,
     );
   }
 }

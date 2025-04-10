@@ -19,10 +19,31 @@ class CategoriesRepositoriesImpl implements CategoriesRepositories {
     final categories = await categoriesRemoteDataSources.fecthAllMinimalStyle();
     return categories.map((ref) => ref.toEntity()).toList();
   }
-  
+
   @override
-  Future<List<CategoryEntity>> fecthAllSharpDressingCategories()async {
-   final categories = await categoriesRemoteDataSources.fecthAllSharpDressing();
+  Future<List<CategoryEntity>> fecthAllSharpDressingCategories() async {
+    final categories =
+        await categoriesRemoteDataSources.fecthAllSharpDressing();
+    return categories.map((ref) => ref.toEntity()).toList();
+  }
+
+  @override
+  Future<List<CategoryEntity>> getWomenNormalCategories() async {
+    final categories =
+        await categoriesRemoteDataSources.getWomenNormalCategories();
+    return categories.map((ref) => ref.toEntity()).toList();
+  }
+
+  @override
+  Future<List<CategoryEntity>> getWomenMinimalStyleCategories() async {
+    final categories = await categoriesRemoteDataSources.getWomenMinimalStyle();
+    return categories.map((ref) => ref.toEntity()).toList();
+  }
+
+  @override
+  Future<List<CategoryEntity>> getWomenSharpDressingCategories() async {
+    final categories =
+        await categoriesRemoteDataSources.getWomenSharpDressing();
     return categories.map((ref) => ref.toEntity()).toList();
   }
 }

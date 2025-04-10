@@ -4,4 +4,8 @@ abstract class CategoriesRepositories {
   Future<List<CategoryEntity>> fecthAllNormalCategories();
   Future<List<CategoryEntity>> fecthAllMinimalStyleCategories();
   Future<List<CategoryEntity>> fecthAllSharpDressingCategories();
+
+  Future<List<CategoryEntity>> getWomenNormalCategories();
+  Future<List<CategoryEntity>> getWomenMinimalStyleCategories();
+  Future<List<CategoryEntity>> getWomenSharpDressingCategories();
 }

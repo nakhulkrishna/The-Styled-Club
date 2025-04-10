@@ -2,13 +2,19 @@ import 'package:clothingstore/core/constants/colors.dart';
 import 'package:clothingstore/common/widgets/discountbanner.dart';
 
 import 'package:clothingstore/common/widgets/product_card.dart';
+import 'package:clothingstore/features/cart/presentation/bloc/cubit/cart_cubit.dart';
+import 'package:clothingstore/features/cart/presentation/bloc/cubit/cart_state.dart';
 import 'package:clothingstore/features/cart/presentation/widgets/car_products_card.dart';
 import 'package:clothingstore/features/cart/presentation/widgets/cart_bottom_bar.dart';
 import 'package:clothingstore/features/cart/presentation/widgets/final_price_data.dart';
 import 'package:clothingstore/features/cart/presentation/widgets/items_count.dart';
-import 'package:clothingstore/features/cart/presentation/widgets/select_address.dart';
+import 'package:clothingstore/features/profile/presentation/bloc/cubit/address_cubit.dart';
+import 'package:clothingstore/features/profile/presentation/bloc/cubit/address_state.dart';
+
+import 'package:clothingstore/features/profile/presentation/pages/addresPages/pages/address_page.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 
@@ -38,25 +44,40 @@ class CartPage extends StatelessWidget {
               screenWidth: screenWidth,
               screenHeight: screenHeight,
             ),
-            SelectAddress(screenWidth: screenWidth),
-            Divider(thickness: 5, color: GColors.gery),
 
+            UserAddressSelector(
+              screenHeight: screenHeight,
+              screenWidth: screenWidth,
+            ),
             ItesmCount(),
 
             Divider(color: GColors.gery),
 
-            SizedBox(
-              height: screenHeight * 0.9,
-              child: ListView.builder(
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: 3,
-                itemBuilder: (context, index) {
-                  return CartProductsCard(
-                    screenHeight: screenHeight,
-                    screenWidth: screenWidth,
+            BlocBuilder<FetchCartItemsCubit, FetchCartState>(
+              builder: (context, state) {
+                if (state is FetchCartLoading) {
+                  return SizedBox.shrink();
+                } else if (state is FetchCartLoaded) {
+                  return SizedBox(
+                    height: screenHeight * 0.9,
+                    child: ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: state.cartItem.length,
+                      itemBuilder: (context, index) {
+                        return CartProductsCard(
+                          cartModel: state.cartItem[index],
+                          screenHeight: screenHeight,
+                          screenWidth: screenWidth,
+                        );
+                      },
+                    ),
                   );
-                },
-              ),
+                } else if (state is FetchCartError) {
+                  return SizedBox.shrink();
+                } else {
+                  return SizedBox.shrink();
+                }
+              },
             ),
             SizedBox(height: screenHeight * 0.01),
 
@@ -187,6 +208,123 @@ class CouponAndGift extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class UserAddressSelector extends StatelessWidget {
+  final double screenWidth;
+  final double screenHeight;
+
+  const UserAddressSelector({
+    super.key,
+    required this.screenWidth,
+    required this.screenHeight,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<DeliveryCubit, DeliveryState>(
+      builder: (context, state) {
+        if (state is DeliveryLoading) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (state is DeliveryLoaded) {
+          final addresses = state.addresses;
+          final selectedId = state.selectedAddressId;
+
+          if (addresses.isEmpty) {
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                "No saved addresses found.",
+                style: GoogleFonts.poppins(color: GColors.darkgery),
+              ),
+            );
+          }
+
+          // If no address is selected, select the first one by default (with non-null id)
+          final firstValidAddress = addresses.firstWhere(
+            (address) => address.id != null,
+            orElse: () => addresses.first,
+          );
+
+          if (selectedId == null && firstValidAddress.id != null) {
+            context.read<DeliveryCubit>().selectAddress(firstValidAddress.id!);
+          }
+
+          return Padding(
+            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      "Select Delivery Address",
+                      style: GoogleFonts.poppins(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const Spacer(),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AddressPage(),
+                          ),
+                        );
+                      },
+                      child: Text(
+                        "Add Address",
+                        style: GoogleFonts.poppins(
+                          fontSize: 12,
+                          color: GColors.buttonPrimary,
+                          fontWeight: FontWeight.w300,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                ...addresses.where((address) => address.id != null).map((
+                  address,
+                ) {
+                  return RadioListTile<String>(
+                    contentPadding: EdgeInsets.zero,
+                    value: address.id!,
+                    groupValue: selectedId,
+                    onChanged: (value) {
+                      context.read<DeliveryCubit>().selectAddress(value!);
+                    },
+                    title: Text(
+                      address.addressType,
+                      style: GoogleFonts.poppins(fontWeight: FontWeight.w500),
+                    ),
+                    subtitle: Text(
+                      "${address.flat}, ${address.street} (${address.pincode}), ${address.landmark}, ${address.city}, ${address.state} ${address.phone}",
+                      style: GoogleFonts.poppins(
+                        fontSize: 12,
+                        color: GColors.darkgery,
+                      ),
+                    ),
+                  );
+                }),
+              ],
+            ),
+          );
+        } else if (state is DeliveryError) {
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "Failed to load addresses",
+              style: GoogleFonts.poppins(color: Colors.red),
+            ),
+          );
+        } else {
+          return const SizedBox.shrink();
+        }
+      },
     );
   }
 }

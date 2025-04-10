@@ -1,8 +1,8 @@
+import 'package:clothingstore/features/cart/presentation/pages/cart_screen/cart_page.dart';
 import 'package:clothingstore/features/home/presentation/pages/home_screen.dart';
 import 'package:clothingstore/features/order/presentation/pages/orders_page.dart';
 
 import 'package:clothingstore/features/profile/presentation/pages/profile_page.dart';
-import 'package:clothingstore/features/wishlist/presentation/pages/wishlist.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iconsax/iconsax.dart';
@@ -20,7 +20,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
   // Define the pages that correspond to each tab
   final List<Widget> _pages = [
     HomeScreen(),
-    WishlitsPage(),
+    CartPage(),
     OrdersPage(),
     ProfilePage(),
   ];
@@ -43,7 +43,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
         type: BottomNavigationBarType.fixed, // Fixes the icons for all tabs
         items: [
           BottomNavigationBarItem(icon: Icon(Iconsax.home), label: ''),
-          BottomNavigationBarItem(icon: Icon(Iconsax.heart), label: ''),
+          BottomNavigationBarItem(icon: Icon(Iconsax.shopping_bag), label: ''),
           BottomNavigationBarItem(icon: Icon(Iconsax.box), label: ''),
           BottomNavigationBarItem(icon: Icon(Iconsax.user), label: ''),
         ],

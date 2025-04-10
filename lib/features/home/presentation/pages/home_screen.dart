@@ -1,7 +1,7 @@
 import 'package:clothingstore/core/constants/colors.dart';
 
 import 'package:clothingstore/features/home/presentation/pages/adornments_tab_screen/adornments_tab_screen.dart';
-import 'package:clothingstore/features/home/presentation/pages/cart_screen/cart_page.dart';
+import 'package:clothingstore/features/cart/presentation/pages/cart_screen/cart_page.dart';
 import 'package:clothingstore/features/home/presentation/pages/men_tab_screen/man_tab_screen.dart';
 import 'package:clothingstore/features/home/presentation/pages/search_screen/search_screen.dart';
 import 'package:clothingstore/features/home/presentation/pages/women_tab_screen/women_tab_screen.dart';
@@ -15,7 +15,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
+      length: 2,
       child: Scaffold(
         appBar: AppBar(
           actions: [
@@ -27,15 +27,6 @@ class HomeScreen extends StatelessWidget {
                 );
               },
               icon: Icon(Iconsax.search_normal_1),
-            ),
-            IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => CartPage()),
-                );
-              },
-              icon: Icon(Iconsax.bag),
             ),
           ],
           centerTitle: true,
@@ -51,28 +42,24 @@ class HomeScreen extends StatelessWidget {
             unselectedLabelStyle: GoogleFonts.poppins(color: GColors.black),
             indicatorSize: TabBarIndicatorSize.tab,
             indicatorColor: GColors.buttonPrimary,
-            tabs: [
-              Tab(text: "MEN"),
-              Tab(text: "WOMEN"),
-              Tab(text: "ADORNMENT"),
-            ],
+            tabs: [Tab(text: "MEN"), Tab(text: "WOMEN")],
           ),
         ),
         body: TabBarView(
           physics: NeverScrollableScrollPhysics(),
           children: [
             SingleChildScrollView(
-              physics:BouncingScrollPhysics().applyTo(ClampingScrollPhysics()),
+              physics: BouncingScrollPhysics().applyTo(ClampingScrollPhysics()),
               child: MenTabScreen(),
             ),
             SingleChildScrollView(
               physics: BouncingScrollPhysics().applyTo(ClampingScrollPhysics()),
               child: WomenTabScreen(),
             ),
-            SingleChildScrollView(
-              physics: BouncingScrollPhysics().applyTo(ClampingScrollPhysics()),
-              child: AdornmentsTabScreen(),
-            ),
+            // SingleChildScrollView(
+            //   physics: BouncingScrollPhysics().applyTo(ClampingScrollPhysics()),
+            //   child: AdornmentsTabScreen(),
+            // ),
           ],
         ),
       ),

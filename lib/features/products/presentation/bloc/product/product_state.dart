@@ -103,3 +103,112 @@ class SharpDressungCategoryBasedProductsError
   final String message;
   SharpDressungCategoryBasedProductsError(this.message);
 }
+
+
+
+//====================women====================//
+abstract class WomenProductState {}
+
+class WomenProductInitial extends WomenProductState {}
+
+class WomenProductLoading extends WomenProductState {}
+
+class WomenProductLoaded extends WomenProductState {
+  final List<ProductEntity> products;
+  WomenProductLoaded(this.products);
+}
+
+class WomenProductError extends WomenProductState {
+  final String message;
+  WomenProductError(this.message);
+}
+
+// for Top Picks
+abstract class WomenTopPickedProductsState {}
+
+class WomenTopPickedProductsInitial extends WomenTopPickedProductsState {}
+
+class WomenTopPickedProductsLoading extends WomenTopPickedProductsState {}
+
+class WomenTopPickedProductsLoaded extends WomenTopPickedProductsState {
+  final List<ProductEntity> products;
+  WomenTopPickedProductsLoaded(this.products);
+}
+
+class WomenTopPickedProductsError extends WomenTopPickedProductsState {
+  final String message;
+  WomenTopPickedProductsError(this.message);
+}
+
+// Abstract base class for CategoryBasedProducts states
+abstract class WomenCategoryBasedProductsState {}
+
+// Initial state
+class WomenCategoryBasedProductsInitial
+    extends WomenCategoryBasedProductsState {}
+
+// Loading state
+class WomenCategoryBasedProductsLoading
+    extends WomenCategoryBasedProductsState {}
+
+// Loaded state with list of products
+class WomenCategoryBasedProductsLoaded extends WomenCategoryBasedProductsState {
+  final List<ProductEntity> products;
+  WomenCategoryBasedProductsLoaded(this.products);
+}
+
+// Error state with error message
+class WomenCategoryBasedProductsError extends WomenCategoryBasedProductsState {
+  final String message;
+  WomenCategoryBasedProductsError(this.message);
+}
+
+// Abstract base class for CategoryBasedProducts states
+abstract class WomenMinimalCategoryBasedProductsState {}
+
+// Initial state
+class WomenMinimalCategoryBasedProductsInitial
+    extends WomenMinimalCategoryBasedProductsState {}
+
+// Loading state
+class WomenMinimalCategoryBasedProductsLoading
+    extends WomenMinimalCategoryBasedProductsState {}
+
+// Loaded state with list of products
+class WomenMinimalCategoryBasedProductsLoaded
+    extends WomenMinimalCategoryBasedProductsState {
+  final List<ProductEntity> products;
+  WomenMinimalCategoryBasedProductsLoaded(this.products);
+}
+
+// Error state with error message
+class WomenMinimalCategoryBasedProductsError
+    extends WomenMinimalCategoryBasedProductsState {
+  final String message;
+  WomenMinimalCategoryBasedProductsError(this.message);
+}
+
+// Abstract base class for CategoryBasedProducts states
+abstract class WomenSharpDressungCategoryBasedProductsState {}
+
+// Initial state
+class WomenSharpDressungCategoryBasedProductsInitial
+    extends WomenSharpDressungCategoryBasedProductsState {}
+
+// Loading state
+class WomenSharpDressungCategoryBasedProductsLoading
+    extends WomenSharpDressungCategoryBasedProductsState {}
+
+// Loaded state with list of products
+class WomenSharpDressungCategoryBasedProductsLoaded
+    extends WomenSharpDressungCategoryBasedProductsState {
+  final List<ProductEntity> products;
+ WomenSharpDressungCategoryBasedProductsLoaded(this.products);
+}
+
+// Error state with error message
+class WomenSharpDressungCategoryBasedProductsError
+    extends WomenSharpDressungCategoryBasedProductsState {
+  final String message;
+  WomenSharpDressungCategoryBasedProductsError(this.message);
+}

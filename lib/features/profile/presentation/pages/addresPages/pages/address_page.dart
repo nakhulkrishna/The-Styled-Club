@@ -4,9 +4,12 @@ import 'package:clothingstore/features/data/models/Users/user_model.dart';
 
 import 'package:clothingstore/features/cart/presentation/widgets/text_filed.dart';
 import 'package:clothingstore/common/widgets/radio_button.dart';
+import 'package:clothingstore/features/profile/data/model/user_model.dart';
+import 'package:clothingstore/features/profile/presentation/bloc/cubit/address_cubit.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 
@@ -37,9 +40,6 @@ class AddressPage extends StatelessWidget {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
 
-    //* formatters
-    // final NFormatters formatter = NFormatters();
-    // final User? userId = FirebaseAuth.instance.currentUser;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -164,8 +164,8 @@ class AddressPage extends StatelessWidget {
                       final User? user = FirebaseAuth.instance.currentUser;
 
                       if (user != null) {
-                        UserModel userModel = UserModel(
-                          uid: user.uid, // Replace with real uid
+                        AddressModel addressModel = AddressModel(
+                          
                           firstName: firstNameController.text,
                           lastName: lastNameController.text,
                           phone: phoneController.text,
@@ -177,9 +177,29 @@ class AddressPage extends StatelessWidget {
                           state: stateController.text,
                           addressType: "home",
                         );
+
+                        // Save the data
+                        context.read<DeliveryCubit>().addNewAddress(
+                          addressModel,
+                        );
+
+                        // Show success snackbar
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Address saved successfully!'),
+                            backgroundColor: Colors.green,
+                            duration: Duration(seconds: 2),
+                          ),
+                        );
+
+                        // Wait a moment then go back
+                        Future.delayed(Duration(seconds: 2), () {
+                          Navigator.of(context).pop();
+                        });
                       }
                     }
                   },
+
                   child: Container(
                     height: screenHeight * 0.06,
                     width: screenWidth,

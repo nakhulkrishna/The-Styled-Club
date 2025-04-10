@@ -1,6 +1,11 @@
 // Platform detection
 import 'package:clothingstore/common/bloc/products_size_cubit.dart';
 import 'package:clothingstore/core/router/go_route.dart';
+import 'package:clothingstore/features/cart/data/datasource/cart_remote_data_source.dart';
+import 'package:clothingstore/features/cart/data/repository/cart_repository_impl.dart';
+import 'package:clothingstore/features/cart/domain/repositories/cart_repository.dart';
+import 'package:clothingstore/features/cart/domain/usecases/cart_usecases.dart';
+import 'package:clothingstore/features/cart/presentation/bloc/cubit/cart_cubit.dart';
 
 import 'package:clothingstore/features/home/data/datasources/banner/banner_romote_data_source.dart';
 import 'package:clothingstore/features/home/data/repositories/banner/banner_repositories_impl.dart';
@@ -14,6 +19,11 @@ import 'package:clothingstore/features/products/domain/usecases/categorie_usecas
 import 'package:clothingstore/features/products/domain/usecases/product_usecases.dart';
 import 'package:clothingstore/features/products/presentation/bloc/categories/categorie_cubit.dart';
 import 'package:clothingstore/features/products/presentation/bloc/product/product_cubit.dart';
+import 'package:clothingstore/features/profile/data/datasource/delivery_address_remote_source.dart';
+import 'package:clothingstore/features/profile/data/repositories/delivery_addresss_repository_impl.dart';
+import 'package:clothingstore/features/profile/domain/repositories/delivery_repository.dart';
+import 'package:clothingstore/features/profile/domain/usecases/delivery_usecases.dart';
+import 'package:clothingstore/features/profile/presentation/bloc/cubit/address_cubit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -130,12 +140,43 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider(
             create:
+                (context) => CartCubit(
+                  CartUsecases(
+                    cartRepository: CartRepositoryImpl(
+                      dataSource: CartRemoteDataSource(),
+                    ),
+                  ),
+                ),
+          ),
+          BlocProvider(
+            create:
+                (context) => FetchCartItemsCubit(
+                  CartUsecases(
+                    cartRepository: CartRepositoryImpl(
+                      dataSource: CartRemoteDataSource(),
+                    ),
+                  ),
+                ),
+          ),
+          BlocProvider(
+            create:
                 (context) => NormalCategorieCubit(
                   CategorieUsecases(
                     CategoriesRepositoriesImpl(
                       categoriesRemoteDataSources: CategoriesRemoteDataSources(
                         firestore: FirebaseFirestore.instance,
                       ),
+                    ),
+                  ),
+                ),
+          ),
+          BlocProvider(
+            create:
+                (context) => DeliveryCubit(
+                  DeliveryUsecases(
+                    repository: DeliveryAddresssRepositoryImpl(
+                      deliveryAddressRemoteSource:
+                          DeliveryAddressRemoteSource(),
                     ),
                   ),
                 ),
@@ -166,7 +207,55 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider(
             create:
+                (context) => WomenNormalCategorieCubit(
+                  CategorieUsecases(
+                    CategoriesRepositoriesImpl(
+                      categoriesRemoteDataSources: CategoriesRemoteDataSources(
+                        firestore: FirebaseFirestore.instance,
+                      ),
+                    ),
+                  ),
+                ),
+          ),
+          BlocProvider(
+            create:
+                (context) => WomenMinimalStyleCategoriesCubit(
+                  CategorieUsecases(
+                    CategoriesRepositoriesImpl(
+                      categoriesRemoteDataSources: CategoriesRemoteDataSources(
+                        firestore: FirebaseFirestore.instance,
+                      ),
+                    ),
+                  ),
+                ),
+          ),
+          BlocProvider(
+            create:
+                (context) => WomenSharpDressingStyleCubit(
+                  CategorieUsecases(
+                    CategoriesRepositoriesImpl(
+                      categoriesRemoteDataSources: CategoriesRemoteDataSources(
+                        firestore: FirebaseFirestore.instance,
+                      ),
+                    ),
+                  ),
+                ),
+          ),
+          BlocProvider(
+            create:
                 (context) => ProductCubit(
+                  ProductUsecases(
+                    ProductsRepositoriesImpl(
+                      productRemoteDataSources: ProductRemoteDataSources(
+                        firestore: FirebaseFirestore.instance,
+                      ),
+                    ),
+                  ),
+                ),
+          ),
+          BlocProvider(
+            create:
+                (context) => WomenTopPickedCubit(
                   ProductUsecases(
                     ProductsRepositoriesImpl(
                       productRemoteDataSources: ProductRemoteDataSources(
@@ -212,18 +301,6 @@ class MyApp extends StatelessWidget {
                   ),
                 ),
           ),
-          // BlocProvider(
-          //   create:
-          //       (context) => SharpDressingCategoryBasedCubit(
-          //         ProductUsecases(
-          //           ProductsRepositoriesImpl(
-          //             productRemoteDataSources: ProductRemoteDataSources(
-          //               firestore: FirebaseFirestore.instance,
-          //             ),
-          //           ),
-          //         ),
-          //       ),
-          // ),
         ],
         child: MaterialApp.router(
           debugShowCheckedModeBanner: false,

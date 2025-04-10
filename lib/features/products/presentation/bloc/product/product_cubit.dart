@@ -5,115 +5,220 @@ import 'package:clothingstore/features/products/presentation/bloc/product/produc
 import 'package:clothingstore/features/products/domain/usecases/product_usecases.dart';
 
 class ProductCubit extends Cubit<ProductState> {
-  ProductUsecases fecthAllProducts;
+  ProductUsecases usecases;
 
-  ProductCubit(this.fecthAllProducts) : super(ProductInitial()) {
-    fecthAllProduct();
+  ProductCubit(this.usecases) : super(ProductInitial()) {
+    menAllProduct();
+    
   }
-
-  Future<void> fecthAllProduct() async {
-    emit(ProductLoading());
-    try {
-      final products = await fecthAllProducts.getAllProducts();
-      emit(ProductLoaded(products));
-    } catch (e) {
-      emit(ProductError(e.toString()));
+  Future<void> menAllProduct() async {
+      emit(ProductLoading());
+      try {
+        final products = await usecases.menAllProducts();
+        emit(ProductLoaded(products));
+      } catch (e) {
+        emit(ProductError(e.toString()));
+      }
     }
   }
+
+  // For top picked products
+  class TopPickedCubit extends Cubit<TopPickedProductsState> {
+    ProductUsecases usecases;
+
+    TopPickedCubit(this.usecases) : super(TopPickedProductsInitial()) {
+      menTopPickedProduct();
+    }
+
+    Future<void> menTopPickedProduct() async {
+      emit(TopPickedProductsLoading());
+      try {
+        final productsToppicked = await usecases.menTopPickedProducts();
+        emit(TopPickedProductsLoaded(productsToppicked));
+      } catch (e) {
+        emit(TopPickedProductsError(e.toString()));
+      }
+    }
+  }
+
+  class CategoryBasedCubit extends Cubit<CategoryBasedProductsState> {
+    final ProductUsecases productUsecases;
+
+    CategoryBasedCubit(this.productUsecases)
+      : super(CategoryBasedProductsInitial());
+
+    // Fetch products based on category and itemCategory
+    Future<void> fetchCategoryBasedProducts(
+      String categoryId,
+      String itemCategory,
+    ) async {
+      emit(CategoryBasedProductsLoading());
+      try {
+        final products = await productUsecases.menCategoryBasedProducts(
+          categoryId,
+          itemCategory,
+        );
+        emit(CategoryBasedProductsLoaded(products));
+      } catch (e) {
+        emit(CategoryBasedProductsError(e.toString()));
+      }
+    }
+  }
+
+  class MinimalCategoryBasedCubit
+      extends Cubit<MinimalCategoryBasedProductsState> {
+    final ProductUsecases productUsecases;
+
+    MinimalCategoryBasedCubit(this.productUsecases)
+      : super(MinimalCategoryBasedProductsInitial());
+
+    // Fetch products based on category and itemCategory
+    Future<void> fetchMinimalCategoryBasedProducts(
+      String categoryId,
+      String itemCategory,
+    ) async {
+      emit(MinimalCategoryBasedProductsLoading());
+      try {
+        final products = await productUsecases.menMinimalBasedProducts(
+          categoryId,
+          itemCategory,
+        );
+        emit(MinimalCategoryBasedProductsLoaded(products));
+      } catch (e) {
+        emit(MinimalCategoryBasedProductsError(e.toString()));
+      }
+    }
+  }
+
+  class SharpDressingCategoryBasedCubit
+      extends Cubit<SharpDressungCategoryBasedProductsState> {
+    final ProductUsecases productUsecases;
+
+    SharpDressingCategoryBasedCubit(this.productUsecases)
+      : super(SharpDressungCategoryBasedProductsInitial());
+
+    // Fetch products based on category and itemCategory
+
+    Future<void> fetchSharpDressingCategoryBasedProducts(
+      String categoryId,
+      String itemCategory,
+    ) async {
+      emit(SharpDressungCategoryBasedProductsLoading());
+      try {
+        final products = await productUsecases.menSharpDressingBasedProducts(
+          categoryId,
+          itemCategory,
+        );
+        emit(SharpDressungCategoryBasedProductsLoaded(products));
+      } catch (e) {
+        emit(SharpDressungCategoryBasedProductsError(e.toString()));
+      }
+    }
+
+
+  //   Future<void> womenAllProduct() async {
+  //   emit(ProductLoading());
+  //   try {
+  //     final products = await usecases.womenAllProducts();
+  //     emit(ProductLoaded(products));
+  //   } catch (e) {
+  //     emit(ProductError(e.toString()));
+  //   }
+  // }
 }
 
 // For top picked products
-class TopPickedCubit extends Cubit<TopPickedProductsState> {
-  ProductUsecases fecthAllProducts;
+class WomenTopPickedCubit extends Cubit<WomenTopPickedProductsState> {
+  ProductUsecases usecases;
 
-  TopPickedCubit(this.fecthAllProducts) : super(TopPickedProductsInitial()) {
-    fecthTopPickedProduct();
+  WomenTopPickedCubit(this.usecases) : super(WomenTopPickedProductsInitial()) {
+    womenTopPickedProduct();
   }
 
-  Future<void> fecthTopPickedProduct() async {
-    emit(TopPickedProductsLoading());
+  Future<void> womenTopPickedProduct() async {
+    emit(WomenTopPickedProductsLoading());
     try {
-      final productsToppicked = await fecthAllProducts.getTopPickedProducts();
-      emit(TopPickedProductsLoaded(productsToppicked));
+      final productsToppicked = await usecases.womenTopPickedProducts();
+      emit(WomenTopPickedProductsLoaded(productsToppicked));
     } catch (e) {
-      emit(TopPickedProductsError(e.toString()));
+      emit(WomenTopPickedProductsError(e.toString()));
     }
   }
 }
 
-class CategoryBasedCubit extends Cubit<CategoryBasedProductsState> {
+class WomenCategoryBasedCubit extends Cubit<WomenCategoryBasedProductsState> {
   final ProductUsecases productUsecases;
 
-  CategoryBasedCubit(this.productUsecases)
-    : super(CategoryBasedProductsInitial());
+  WomenCategoryBasedCubit(this.productUsecases)
+    : super(WomenCategoryBasedProductsInitial());
 
   // Fetch products based on category and itemCategory
   Future<void> fetchCategoryBasedProducts(
     String categoryId,
     String itemCategory,
   ) async {
-    emit(CategoryBasedProductsLoading());
+    emit(WomenCategoryBasedProductsLoading());
     try {
-      final products = await productUsecases.fecthCategoryBasedProducts(
+      final products = await productUsecases.womenCategoryBasedProducts(
         categoryId,
         itemCategory,
       );
-      emit(CategoryBasedProductsLoaded(products));
+      emit(WomenCategoryBasedProductsLoaded(products));
     } catch (e) {
-      emit(CategoryBasedProductsError(e.toString()));
+      emit(WomenCategoryBasedProductsError(e.toString()));
     }
   }
 }
-class MinimalCategoryBasedCubit extends Cubit<MinimalCategoryBasedProductsState> {
+
+class WomenMinimalCategoryBasedCubit
+    extends Cubit<WomenMinimalCategoryBasedProductsState> {
   final ProductUsecases productUsecases;
 
-  MinimalCategoryBasedCubit(this.productUsecases)
-    : super(MinimalCategoryBasedProductsInitial());
+  WomenMinimalCategoryBasedCubit(this.productUsecases)
+    : super(WomenMinimalCategoryBasedProductsInitial());
 
   // Fetch products based on category and itemCategory
   Future<void> fetchMinimalCategoryBasedProducts(
     String categoryId,
     String itemCategory,
   ) async {
-    emit(MinimalCategoryBasedProductsLoading());
+    emit(WomenMinimalCategoryBasedProductsLoading());
     try {
-      final products = await productUsecases.fecthMinimalBasedProducts(
+      final products = await productUsecases.womenMinimalBasedProducts(
         categoryId,
         itemCategory,
       );
-      emit(MinimalCategoryBasedProductsLoaded(products));
+      emit(WomenMinimalCategoryBasedProductsLoaded(products));
     } catch (e) {
-      emit(MinimalCategoryBasedProductsError(e.toString()));
+      emit(WomenMinimalCategoryBasedProductsError(e.toString()));
     }
   }
-  
 }
 
-
-
-class SharpDressingCategoryBasedCubit
-    extends Cubit<SharpDressungCategoryBasedProductsState> {
+class WomenSharpDressingCategoryBasedCubit
+    extends Cubit<WomenSharpDressungCategoryBasedProductsState> {
   final ProductUsecases productUsecases;
 
-  SharpDressingCategoryBasedCubit(this.productUsecases)
-    : super(SharpDressungCategoryBasedProductsInitial());
+  WomenSharpDressingCategoryBasedCubit(this.productUsecases)
+    : super(WomenSharpDressungCategoryBasedProductsInitial());
 
   // Fetch products based on category and itemCategory
-  
 
-Future<void> fetchSharpDressingCategoryBasedProducts(
+  Future<void> fetchSharpDressingCategoryBasedProducts(
     String categoryId,
     String itemCategory,
   ) async {
-    emit(SharpDressungCategoryBasedProductsLoading());
+    emit(WomenSharpDressungCategoryBasedProductsLoading());
     try {
-      final products = await productUsecases.fecthSharpDressingBasedProducts(
+      final products = await productUsecases.womenSharpDressingBasedProducts(
         categoryId,
         itemCategory,
       );
-      emit(SharpDressungCategoryBasedProductsLoaded(products));
+      emit(WomenSharpDressungCategoryBasedProductsLoaded(products));
     } catch (e) {
-      emit(SharpDressungCategoryBasedProductsError(e.toString()));
+      emit(WomenSharpDressungCategoryBasedProductsError(e.toString()));
     }
   }
 }
+
+

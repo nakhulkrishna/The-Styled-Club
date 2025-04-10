@@ -7,57 +7,44 @@ class ProductRemoteDataSources {
   final FirebaseFirestore firestore;
 
   ProductRemoteDataSources({required this.firestore});
-
-  //  Fetching All Men New Arrived Products
-  Future<List<ProductModel>> fetchAllMenNewArrivelProducts() async {
-    final snapShot = await firestore.collection("Products").get();
-    return snapShot.docs.map((doc) => ProductModel.fromSnapshot(doc)).toList();
+  //========================MEN===========================//
+  Future<List<ProductModel>> getMenNewArrivals() async {
+    final snapshot = await firestore.collection("Products").get();
+    return snapshot.docs.map((doc) => ProductModel.fromSnapshot(doc)).toList();
   }
 
-  //  Fetching Top Picks Products (All)
-  Future<List<ProductModel>> fetchAllMenTopPicksProducts() async {
-    final snapShot =
+  Future<List<ProductModel>> getMenTopPicks() async {
+    final snapshot =
         await firestore
             .collection("Products")
             .orderBy('SoldQuantity', descending: true)
             .limit(300)
             .get();
-    return snapShot.docs.map((doc) => ProductModel.fromSnapshot(doc)).toList();
+    return snapshot.docs.map((doc) => ProductModel.fromSnapshot(doc)).toList();
   }
 
-  // 🔹 Fetching Sharp Dressing Products (All)
-  // Future<List<ProductModel>> fetchAllMenSharpDressingProducts() async {
-  //   final snapShot =
-  //       await firestore
-  //           .collection("Products")
-  //           .orderBy('SoldQuantity', descending: true)
-  //           .limit(300)
-  //           .get();
-  //   return snapShot.docs.map((doc) => ProductModel.fromSnapshot(doc)).toList();
-  // }
-
-  Future<List<ProductModel>> fecthNormalCategorieBasedProducts(
-    String categorieId,
-    String itemCategory,
-  ) async {
-    final snapShot =
+  Future<List<ProductModel>> getMenProductsByCategory({
+    required String categoryId,
+    required String itemCategory,
+  }) async {
+    final snapshot =
         await firestore
             .collection("Products")
-            .where('CategoryId', isEqualTo: categorieId)
+            .where('CategoryId', isEqualTo: categoryId)
             .where('itemCategory', isEqualTo: itemCategory)
             .get();
 
     final products =
-        snapShot.docs.map((doc) => ProductModel.fromSnapshot(doc)).toList();
+        snapshot.docs.map((doc) => ProductModel.fromSnapshot(doc)).toList();
     log(products.toString());
     return products;
   }
 
-  Future<List<ProductModel>> fecthMinimalStyleCategorieBasedProducts(
-    String itemCategory,
-    String categoryId,
-  ) async {
-    final snapShot =
+  Future<List<ProductModel>> getMenMinimalStyleProducts({
+    required String categoryId,
+    required String itemCategory,
+  }) async {
+    final snapshot =
         await firestore
             .collection("Products")
             .where('itemCategory', isEqualTo: itemCategory)
@@ -65,16 +52,16 @@ class ProductRemoteDataSources {
             .get();
 
     final products =
-        snapShot.docs.map((doc) => ProductModel.fromSnapshot(doc)).toList();
+        snapshot.docs.map((doc) => ProductModel.fromSnapshot(doc)).toList();
     log(products.toString());
     return products;
   }
 
-  Future<List<ProductModel>> fecthSharpDressungCategorieBasedProducts(
-    String itemCategory,
-    String categoryId,
-  ) async {
-    final snapShot =
+  Future<List<ProductModel>> getMenSharpDressingProducts({
+    required String categoryId,
+    required String itemCategory,
+  }) async {
+    final snapshot =
         await firestore
             .collection("Products")
             .where('itemCategory', isEqualTo: itemCategory)
@@ -82,75 +69,76 @@ class ProductRemoteDataSources {
             .get();
 
     final products =
-        snapShot.docs.map((doc) => ProductModel.fromSnapshot(doc)).toList();
+        snapshot.docs.map((doc) => ProductModel.fromSnapshot(doc)).toList();
     log(products.toString());
     return products;
   }
 
-  // 🔹 Fetching All WOMEN Products
-  // Future<List<ProductModel>> fetchAllWomenNewArrivedProducts() async {
-  //   final snapShot =
-  //       await firestore
-  //           .collection("Products")
-  //           .where("itemCategory", isEqualTo: "women")
-  //           .get();
-  //   return snapShot.docs.map((doc) => ProductModel.fromSnapshot(doc)).toList();
-  // }
+  //=========================WOMEN===========================//
 
-  // // 🔹 Fetching WOMEN Top Picks
-  // Future<List<ProductModel>> fetchWomenTopPicksProducts() async {
-  //   final snapShot =
-  //       await firestore
-  //           .collection("Products")
-  //           .where("itemCategory", isEqualTo: "women")
-  //           .orderBy('SoldQuantity', descending: true)
-  //           .limit(300)
-  //           .get();
-  //   return snapShot.docs.map((doc) => ProductModel.fromSnapshot(doc)).toList();
-  // }
+  Future<List<ProductModel>> getWomenNewArrivals() async {
+    final snapshot = await firestore.collection("Products").get();
+    return snapshot.docs.map((doc) => ProductModel.fromSnapshot(doc)).toList();
+  }
 
-  // // 🔹 Fetching WOMEN Sharp Dressing
-  // Future<List<ProductModel>> fetchAllWomenSharpDressing() async {
-  //   final snapShot =
-  //       await firestore
-  //           .collection("Products")
-  //           .where("itemCategory", isEqualTo: "women")
-  //           .orderBy('SoldQuantity', descending: true)
-  //           .limit(300)
-  //           .get();
-  //   return snapShot.docs.map((doc) => ProductModel.fromSnapshot(doc)).toList();
-  // }
+  Future<List<ProductModel>> getWomenTopPicks() async {
+    final snapshot =
+        await firestore
+            .collection("Products")
+            .orderBy('SoldQuantity', descending: true)
+            .limit(300)
+            .get();
+    return snapshot.docs.map((doc) => ProductModel.fromSnapshot(doc)).toList();
+  }
 
-  // Future<List<ProductModel>> fetchAllAdorNewArrivedProducts() async {
-  //   final snapShot =
-  //       await firestore
-  //           .collection("Products")
-  //           .where("itemCategory", isEqualTo: "Ador")
-  //           .get();
-  //   return snapShot.docs.map((doc) => ProductModel.fromSnapshot(doc)).toList();
-  // }
+  Future<List<ProductModel>> getWomenProductsByCategory({
+    required String categoryId,
+    required String itemCategory,
+  }) async {
+    final snapshot =
+        await firestore
+            .collection("Products")
+            .where('CategoryId', isEqualTo: categoryId)
+            .where('itemCategory', isEqualTo: itemCategory)
+            .get();
 
-  // // 🔹 Fetching Ador Top Picks
-  // Future<List<ProductModel>> fetchAdorTopPicksProducts() async {
-  //   final snapShot =
-  //       await firestore
-  //           .collection("Products")
-  //           .where("itemCategory", isEqualTo: "Ador")
-  //           .orderBy('SoldQuantity', descending: true)
-  //           .limit(300)
-  //           .get();
-  //   return snapShot.docs.map((doc) => ProductModel.fromSnapshot(doc)).toList();
-  // }
+    final products =
+        snapshot.docs.map((doc) => ProductModel.fromSnapshot(doc)).toList();
+    log(products.toString());
+    return products;
+  }
 
-  // // 🔹 Fetching Ador Sharp Dressing
-  // Future<List<ProductModel>> fetchAllAdorSharpDressing() async {
-  //   final snapShot =
-  //       await firestore
-  //           .collection("Products")
-  //           .where("itemCategory", isEqualTo: "women")
-  //           .orderBy('SoldQuantity', descending: true)
-  //           .limit(300)
-  //           .get();
-  //   return snapShot.docs.map((doc) => ProductModel.fromSnapshot(doc)).toList();
-  // }
+  Future<List<ProductModel>> getWomenMinimalStyleProducts({
+    required String categoryId,
+    required String itemCategory,
+  }) async {
+    final snapshot =
+        await firestore
+            .collection("Products")
+            .where('itemCategory', isEqualTo: itemCategory)
+            .where('CategoryId', isEqualTo: categoryId)
+            .get();
+
+    final products =
+        snapshot.docs.map((doc) => ProductModel.fromSnapshot(doc)).toList();
+    log(products.toString());
+    return products;
+  }
+
+  Future<List<ProductModel>> getWomenSharpDressingProducts({
+    required String categoryId,
+    required String itemCategory,
+  }) async {
+    final snapshot =
+        await firestore
+            .collection("Products")
+            .where('itemCategory', isEqualTo: itemCategory)
+            .where('CategoryId', isEqualTo: categoryId)
+            .get();
+
+    final products =
+        snapshot.docs.map((doc) => ProductModel.fromSnapshot(doc)).toList();
+    log(products.toString());
+    return products;
+  }
 }

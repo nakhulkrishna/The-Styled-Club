@@ -44,4 +44,49 @@ class CategoriesRemoteDataSources {
         .map((categories) => CategoryModel.fromSnapshot(categories))
         .toList();
   }
+
+  // women
+
+  Future<List<CategoryModel>> getWomenNormalCategories() async {
+    final snapShot =
+        await firestore
+            .collection("Categories")
+            .where("isMinimalStyle", isEqualTo: false)
+            .where("isSharpDressing", isEqualTo: false)
+            .where('itemCategory', isEqualTo: 'woman') // corrected spelling
+            .get();
+
+    final categories =
+        snapShot.docs
+            .map((categories) => CategoryModel.fromSnapshot(categories))
+            .toList();
+    log(categories.toString());
+    return categories;
+  }
+
+  Future<List<CategoryModel>> getWomenMinimalStyle() async {
+    final snapShot =
+        await firestore
+            .collection("Categories")
+            .where("isMinimalStyle", isEqualTo: true)
+            .where('itemCategory', isEqualTo: 'woman')
+            .get();
+
+    return snapShot.docs
+        .map((categories) => CategoryModel.fromSnapshot(categories))
+        .toList();
+  }
+
+  Future<List<CategoryModel>> getWomenSharpDressing() async {
+    final snapShot =
+        await firestore
+            .collection("Categories")
+            .where("isSharpDressing", isEqualTo: true)
+            .where('itemCategory', isEqualTo: 'woman')
+            .get();
+
+    return snapShot.docs
+        .map((categories) => CategoryModel.fromSnapshot(categories))
+        .toList();
+  }
 }

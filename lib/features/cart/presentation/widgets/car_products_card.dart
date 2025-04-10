@@ -1,7 +1,7 @@
 import 'package:clothingstore/core/constants/colors.dart';
+import 'package:clothingstore/features/cart/data/models/cart_model.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 
@@ -10,23 +10,23 @@ class CartProductsCard extends StatelessWidget {
     super.key,
     required this.screenHeight,
     required this.screenWidth,
+    required this.cartModel,
   });
 
   final double screenHeight;
   final double screenWidth;
+  final CartModel cartModel;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: screenHeight * 0.3,
-
       decoration: BoxDecoration(
         border: Border(bottom: BorderSide(color: GColors.gery)),
       ),
       child: Column(
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Transform.scale(
@@ -47,6 +47,7 @@ class CartProductsCard extends StatelessWidget {
                   ),
                   width: screenWidth * 0.3,
                   height: screenHeight * 0.2,
+                  child: Image.network(cartModel.image!, fit: BoxFit.cover),
                 ),
               ),
               SizedBox(width: screenWidth * 0.03),
@@ -56,14 +57,14 @@ class CartProductsCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Cotton Linen : Light Green",
+                      cartModel.title,
                       style: GoogleFonts.poppins(
                         fontSize: 12,
                         fontWeight: FontWeight.w400,
                       ),
                     ),
                     Text(
-                      "Cotton Linen : Light Green",
+                      cartModel.brandName ?? '',
                       style: GoogleFonts.poppins(
                         fontSize: 9,
                         color: GColors.darkgery,
@@ -71,9 +72,7 @@ class CartProductsCard extends StatelessWidget {
                       ),
                     ),
                     SizedBox(
-                      height:
-                          screenHeight *
-                          0.1, // Adjust this if the height isn't intended to be fixed
+                      height: screenHeight * 0.1,
                       child: Row(
                         children: [
                           GestureDetector(
@@ -105,7 +104,11 @@ class CartProductsCard extends StatelessWidget {
                                 children: [
                                   Text("Size :", style: GoogleFonts.poppins()),
                                   SizedBox(width: screenWidth * 0.01),
-                                  Text("S", style: GoogleFonts.poppins()),
+                                  Text(
+                                    cartModel.selectedVariation?['Size'] ??
+                                        'Not selected',
+                                    style: GoogleFonts.poppins(),
+                                  ),
                                   SizedBox(width: screenWidth * 0.02),
                                   Icon(Iconsax.arrow_down_24, size: 15),
                                 ],
@@ -141,20 +144,22 @@ class CartProductsCard extends StatelessWidget {
                                 children: [
                                   Text("Qty :", style: GoogleFonts.poppins()),
                                   SizedBox(width: screenWidth * 0.01),
-                                  Text("1", style: GoogleFonts.poppins()),
+                                  Text(
+                                    cartModel.selectedVariation?['quantity'] ??
+                                        '1',
+                                    style: GoogleFonts.poppins(),
+                                  ),
                                   SizedBox(width: screenWidth * 0.02),
                                   Icon(Iconsax.arrow_down_24, size: 15),
                                 ],
                               ),
                             ),
                           ),
-
-                          // If you have more items in the row, wrap them in Expanded/Flexible as well
                         ],
                       ),
                     ),
                     Text(
-                      "399",
+                      cartModel.price.toString(),
                       style: GoogleFonts.poppins(
                         fontSize: 15,
                         fontWeight: FontWeight.w400,
@@ -173,7 +178,6 @@ class CartProductsCard extends StatelessWidget {
               ),
             ],
           ),
-
           Container(
             height: screenHeight * 0.058,
             decoration: BoxDecoration(
@@ -225,8 +229,6 @@ class BottomSheet extends StatelessWidget {
             style: GoogleFonts.poppins(fontSize: 14),
           ),
           SizedBox(height: screenHeight * .02),
-
-          // Static grid for quantity or size
           Wrap(
             spacing: 10.0,
             runSpacing: 10.0,
@@ -268,10 +270,7 @@ class BottomSheet extends StatelessWidget {
                       },
                     ),
           ),
-
           SizedBox(height: screenHeight * .02),
-
-          // Add to Cart Button
           SizedBox(
             width: screenWidth,
             height: screenHeight * .04,
@@ -284,7 +283,7 @@ class BottomSheet extends StatelessWidget {
                 backgroundColor: GColors.error,
               ),
               onPressed: () {
-                Navigator.pop(context); // Close the bottom sheet
+                Navigator.pop(context);
               },
               child: Text(
                 buttonLabel,

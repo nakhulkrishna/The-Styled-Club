@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:clothingstore/common/bloc/products_size_cubit.dart';
 import 'package:clothingstore/common/widgets/dot_indicator.dart';
 import 'package:clothingstore/core/constants/colors.dart';
@@ -31,7 +33,7 @@ class ProductsDetails extends StatelessWidget {
             .map((e) => e.trim())
             .toList() ??
         [];
-
+    log(productEntity.id);
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.1),
       child: Column(
@@ -43,7 +45,7 @@ class ProductsDetails extends StatelessWidget {
 
           // Product Title and Price Details
           Text(
-            productEntity.title,
+            productEntity.id,
             style: GoogleFonts.poppins(
               fontSize: 13,
               fontWeight: FontWeight.w500,

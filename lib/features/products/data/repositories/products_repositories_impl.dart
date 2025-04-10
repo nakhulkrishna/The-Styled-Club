@@ -4,56 +4,110 @@ import 'package:clothingstore/features/products/domain/repositories/product_repo
 
 // Implementation of the ProductRepositories interface
 class ProductsRepositoriesImpl implements ProductRepositories {
+
   // Remote data source to fetch product data
   ProductRemoteDataSources productRemoteDataSources;
 
-  // Constructor with required remote data source
+  
   ProductsRepositoriesImpl({required this.productRemoteDataSources});
 
-  // Fetch all new arrival men's products and convert to entity list
+  //===========================MEN=============================/
   @override
-  Future<List<ProductEntity>> fecthAllProducts() async {
-    final modelList =
-        await productRemoteDataSources.fetchAllMenNewArrivelProducts();
+  Future<List<ProductEntity>> menAllProducts() async {
+    final modelList = await productRemoteDataSources.getMenNewArrivals();
     return modelList.map((e) => e.toEntity()).toList();
   }
 
-  // Fetch all top picks men's products and convert to entity list
-  @override
-  Future<List<ProductEntity>> fecthTopPicksProducts() async {
-    final modelList =
-        await productRemoteDataSources.fetchAllMenTopPicksProducts();
-    return modelList.map((e) => e.toEntity()).toList();
-  }
-
-  @override
-  Future<List<ProductEntity>> fecthNormalCategoryBasedProducts(
-    String categoryid,
-    String itemCategory,
-  ) async {
-    final modelList = await productRemoteDataSources
-        .fecthNormalCategorieBasedProducts(categoryid, itemCategory);
-    return modelList.map((e) => e.toEntity()).toList();
-  }
-    @override
-  Future<List<ProductEntity>> fecthMinimalCategoryBasedProducts(
-    String categoryid,
-    String itemCategory,
-  ) async {
-    final modelList = await productRemoteDataSources
-        .fecthNormalCategorieBasedProducts(categoryid, itemCategory);
-    return modelList.map((e) => e.toEntity()).toList();
-  }
-
-      @override
-  Future<List<ProductEntity>> fecthSharpDressingCategoryBasedProducts(
-    String categoryid,
-    String itemCategory,
-  ) async {
-    final modelList = await productRemoteDataSources
-        .fecthNormalCategorieBasedProducts(categoryid, itemCategory);
-    return modelList.map((e) => e.toEntity()).toList();
-  }
   
-  
+  @override
+  Future<List<ProductEntity>> menTopPicksProducts() async {
+    final modelList = await productRemoteDataSources.getMenTopPicks();
+    return modelList.map((e) => e.toEntity()).toList();
+  }
+
+  @override
+  Future<List<ProductEntity>> menNormalCategoryBasedProducts(
+    String categoryid,
+    String itemCategory,
+  ) async {
+    final modelList = await productRemoteDataSources.getMenProductsByCategory(
+      categoryId: categoryid,
+      itemCategory: itemCategory,
+    );
+    return modelList.map((e) => e.toEntity()).toList();
+  }
+
+  @override
+  Future<List<ProductEntity>> menMinimalCategoryBasedProducts(
+    String categoryid,
+    String itemCategory,
+  ) async {
+    final modelList = await productRemoteDataSources.getMenMinimalStyleProducts(
+      categoryId: categoryid,
+      itemCategory: itemCategory,
+    );
+    return modelList.map((e) => e.toEntity()).toList();
+  }
+
+  @override
+  Future<List<ProductEntity>> menSharpDressingCategoryBasedProducts(
+    String categoryid,
+    String itemCategory,
+  ) async {
+    final modelList = await productRemoteDataSources.getMenSharpDressingProducts(
+      categoryId: categoryid,
+      itemCategory: itemCategory,
+    );
+    return modelList.map((e) => e.toEntity()).toList();
+  }
+
+    //===========================WOMEN=============================/
+  @override
+  Future<List<ProductEntity>> womenProducts() async {
+    final modelList = await productRemoteDataSources.getMenNewArrivals();
+    return modelList.map((e) => e.toEntity()).toList();
+  }
+
+  @override
+  Future<List<ProductEntity>> womenTopPicksProducts() async {
+    final modelList = await productRemoteDataSources.getWomenTopPicks();
+    return modelList.map((e) => e.toEntity()).toList();
+  }
+
+  @override
+  Future<List<ProductEntity>> womenNormalCategoryBasedProducts(
+    String categoryid,
+    String itemCategory,
+  ) async {
+    final modelList = await productRemoteDataSources.getWomenProductsByCategory(
+      categoryId: categoryid,
+      itemCategory: itemCategory,
+    );
+    return modelList.map((e) => e.toEntity()).toList();
+  }
+
+  @override
+  Future<List<ProductEntity>> womenMinimalCategoryBasedProducts(
+    String categoryid,
+    String itemCategory,
+  ) async {
+    final modelList = await productRemoteDataSources.getWomenMinimalStyleProducts(
+      categoryId: categoryid,
+      itemCategory: itemCategory,
+    );
+    return modelList.map((e) => e.toEntity()).toList();
+  }
+
+  @override
+  Future<List<ProductEntity>> womenSharpDressingCategoryBasedProducts(
+    String categoryid,
+    String itemCategory,
+  ) async {
+    final modelList = await productRemoteDataSources
+        .getWomenSharpDressingProducts(
+          categoryId: categoryid,
+          itemCategory: itemCategory,
+        );
+    return modelList.map((e) => e.toEntity()).toList();
+  }
 }
