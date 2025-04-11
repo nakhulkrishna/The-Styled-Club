@@ -1,5 +1,6 @@
 import 'package:clothingstore/core/constants/colors.dart' show GColors;
 import 'package:clothingstore/core/constants/enums.dart';
+import 'package:clothingstore/features/cart/presentation/bloc/cubit/cart_cubit.dart';
 import 'package:clothingstore/features/data/models/Users/user_model.dart';
 
 import 'package:clothingstore/features/cart/presentation/widgets/text_filed.dart';
@@ -152,10 +153,26 @@ class AddressPage extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: screenHeight * 0.01),
-                RadioButton(
-                  screenHeight: screenHeight,
-                  screenWidth: screenWidth,
-                  groupValue: AddressType.home,
+                BlocBuilder<AddressTypeCubit, AddressType>(
+                  builder: (context, selectedType) {
+                    return Column(
+                      children:
+                          AddressType.values.map((type) {
+                            return RadioListTile<AddressType>(
+                              title: Text(type.toString().split('.').last),
+                              value: type,
+                              groupValue: selectedType,
+                              onChanged: (newType) {
+                                if (newType != null) {
+                                  context.read<AddressTypeCubit>().selectType(
+                                    newType,
+                                  );
+                                }
+                              },
+                            );
+                          }).toList(),
+                    );
+                  },
                 ),
                 SizedBox(height: screenHeight * 0.02),
                 GestureDetector(
@@ -164,8 +181,11 @@ class AddressPage extends StatelessWidget {
                       final User? user = FirebaseAuth.instance.currentUser;
 
                       if (user != null) {
+                        // Get the selected address type from the cubit
+                        final selectedType =
+                            context.read<AddressTypeCubit>().state;
+
                         AddressModel addressModel = AddressModel(
-                          
                           firstName: firstNameController.text,
                           lastName: lastNameController.text,
                           phone: phoneController.text,
@@ -175,15 +195,17 @@ class AddressPage extends StatelessWidget {
                           landmark: landmarkController.text,
                           city: cityController.text,
                           state: stateController.text,
-                          addressType: "home",
+                          addressType:
+                              selectedType
+                                  .toString()
+                                  .split('.')
+                                  .last, // ✅ Correctly assigned
                         );
 
-                        // Save the data
                         context.read<DeliveryCubit>().addNewAddress(
                           addressModel,
                         );
 
-                        // Show success snackbar
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text('Address saved successfully!'),
@@ -192,8 +214,8 @@ class AddressPage extends StatelessWidget {
                           ),
                         );
 
-                        // Wait a moment then go back
                         Future.delayed(Duration(seconds: 2), () {
+                          context.read<DeliveryCubit>().fetchAddresses();
                           Navigator.of(context).pop();
                         });
                       }

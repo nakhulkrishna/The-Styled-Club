@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:clothingstore/core/constants/enums.dart';
 import 'package:clothingstore/features/cart/data/models/cart_model.dart';
 import 'package:clothingstore/features/cart/domain/usecases/cart_usecases.dart';
 import 'package:clothingstore/features/cart/presentation/bloc/cubit/cart_state.dart';
@@ -39,4 +40,45 @@ class FetchCartItemsCubit extends Cubit<FetchCartState> {
       emit(FetchCartError(e.toString()));
     }
   }
+  // void toggleSelection(int index) {
+  //   final currentState = state;
+  //   if (currentState is FetchCartLoaded) {
+  //     final updatedList = List<CartModel>.from(currentState.cartItem);
+  //     updatedList[index].isSelected = !updatedList[index].isSelected;
+  //     emit(FetchCartLoaded( updatedList));
+  //   }
+  // }
+
+  // void selectAll(bool value) {
+  //   final currentState = state;
+  //   if (currentState is FetchCartLoaded) {
+  //     final updatedList =
+  //         currentState.cartItem.map((e) {
+  //           return CartModel(
+  //             productId: e.productId,
+  //             quantity:e.quantity ,
+  //             price:e.price ,
+  //             variationId:e.variationId ,
+  //             title: e.title,
+  //             image: e.image,
+  //             brandName: e.brandName,
+  //             selectedVariation: e.selectedVariation,
+  //             isSelected: value,
+  //           );
+  //         }).toList();
+  //     emit(FetchCartLoaded( updatedList));
+  //   }
+  // }
+
 }
+
+
+class AddressTypeCubit extends Cubit<AddressType> {
+  AddressTypeCubit() : super(AddressType.home); // default value
+
+  void selectType(AddressType type) {
+    emit(type);
+  }
+}
+
+

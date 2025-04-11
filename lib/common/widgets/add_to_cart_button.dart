@@ -78,6 +78,7 @@ class AddToCartButton extends StatelessWidget {
                   if (user == null) return;
 
                   final cartItem = CartModel(
+                    
                     productId: productId.id,
                     brandName: productId.brand!.name,
                     image: productId.thumbnail,

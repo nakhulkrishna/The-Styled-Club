@@ -193,6 +193,7 @@ class MyApp extends StatelessWidget {
                   ),
                 ),
           ),
+          BlocProvider(create: (context) => AddressTypeCubit()),
           BlocProvider(
             create:
                 (context) => SharpDressingStyleCubit(

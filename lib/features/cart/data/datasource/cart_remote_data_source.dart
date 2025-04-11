@@ -45,4 +45,24 @@ class CartRemoteDataSource {
       throw Exception('Failed to fetch cart items');
     }
   }
+
+  // ✅ Delete a cart item
+  Future<void> deleteCartItem({
+    required String userId,
+    required String productId,
+  }) async {
+    try {
+      final cartItemRef = _db
+          .collection('carts')
+          .doc(userId)
+          .collection('items')
+          .doc(productId);
+
+      await cartItemRef.delete();
+      log('Deleted cart item: $productId');
+    } catch (e) {
+      log('Error deleting cart item: $e');
+      throw Exception('Failed to delete cart item');
+    }
+  }
 }

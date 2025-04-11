@@ -10,6 +10,7 @@ class CartModel {
   String variationId;
   String? brandName;
   Map<String, String>? selectedVariation;
+  
 
   CartModel({
     required this.productId,
