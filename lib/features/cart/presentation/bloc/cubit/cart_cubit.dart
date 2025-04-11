@@ -40,38 +40,48 @@ class FetchCartItemsCubit extends Cubit<FetchCartState> {
       emit(FetchCartError(e.toString()));
     }
   }
-  // void toggleSelection(int index) {
-  //   final currentState = state;
-  //   if (currentState is FetchCartLoaded) {
-  //     final updatedList = List<CartModel>.from(currentState.cartItem);
-  //     updatedList[index].isSelected = !updatedList[index].isSelected;
-  //     emit(FetchCartLoaded( updatedList));
-  //   }
-  // }
 
-  // void selectAll(bool value) {
-  //   final currentState = state;
-  //   if (currentState is FetchCartLoaded) {
-  //     final updatedList =
-  //         currentState.cartItem.map((e) {
-  //           return CartModel(
-  //             productId: e.productId,
-  //             quantity:e.quantity ,
-  //             price:e.price ,
-  //             variationId:e.variationId ,
-  //             title: e.title,
-  //             image: e.image,
-  //             brandName: e.brandName,
-  //             selectedVariation: e.selectedVariation,
-  //             isSelected: value,
-  //           );
-  //         }).toList();
-  //     emit(FetchCartLoaded( updatedList));
-  //   }
-  // }
+  void toggleSelection(int index) {
+    final currentState = state;
+    if (currentState is FetchCartLoaded) {
+      final updatedList = List<CartModel>.from(currentState.cartItem);
+      updatedList[index].isSelected = !updatedList[index].isSelected;
+      emit(FetchCartLoaded(updatedList));
+    }
+  }
+
+  void selectAll(bool value) {
+    final currentState = state;
+    if (currentState is FetchCartLoaded) {
+      final updatedList =
+          currentState.cartItem.map((e) {
+            return CartModel(
+              productId: e.productId,
+              quantity: e.quantity,
+              price: e.price,
+              variationId: e.variationId,
+              title: e.title,
+              image: e.image,
+              brandName: e.brandName,
+              selectedVariation: e.selectedVariation,
+              isSelected: value,
+            );
+          }).toList();
+      emit(FetchCartLoaded(updatedList));
+    }
+  }
+
+Future<void> deleteItem(String userId, String productId) async {
+    try {
+      await usecases.deleteCartItem(userId, productId);
+      final updatedCart = await usecases.getCartItems(userId);
+      emit(FetchCartLoaded(updatedCart));
+    } catch (e) {
+      emit(FetchCartError(e.toString()));
+    }
+  }
 
 }
-
 
 class AddressTypeCubit extends Cubit<AddressType> {
   AddressTypeCubit() : super(AddressType.home); // default value
@@ -80,5 +90,3 @@ class AddressTypeCubit extends Cubit<AddressType> {
     emit(type);
   }
 }
-
-

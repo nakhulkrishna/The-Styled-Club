@@ -7,13 +7,23 @@ class FinalPriceData extends StatelessWidget {
     super.key,
     required this.screenHeight,
     required this.screenWidth,
+    required this.totalPrice,
+    required this.itemcount,
   });
 
   final double screenHeight;
   final double screenWidth;
+  final double totalPrice;
+  final int itemcount;
 
   @override
   Widget build(BuildContext context) {
+    // Calculations
+    double gst = totalPrice * 0.18;
+    double shippingCharges = itemcount > 0 ? 50 : 0;
+    double finalTotal = totalPrice + gst + shippingCharges;
+    double cashback = finalTotal * 0.05;
+
     return SizedBox(
       height: screenHeight * 0.3,
       width: screenWidth,
@@ -22,114 +32,78 @@ class FinalPriceData extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Price Details (2 Items)", style: GoogleFonts.poppins()),
-            SizedBox(height: screenHeight * 0.01),
-            Row(
-              children: [
-                Text(
-                  "Cart Total",
-                  style: GoogleFonts.poppins(
-                    color: GColors.darkgery,
-                    fontSize: 12,
-                  ),
-                ),
-                Spacer(),
-                Text(
-                  "4999",
-                  style: GoogleFonts.poppins(
-                    color: GColors.darkgery,
-                    fontSize: 12,
-                  ),
-                ),
-              ],
+            SizedBox(height: screenHeight * 0.02),
+            Text(
+              "Price Details ",
+              style: GoogleFonts.poppins(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: GColors.black,
+              ),
             ),
             SizedBox(height: screenHeight * 0.01),
-            Row(
-              children: [
-                Text(
-                  "GST",
-                  style: GoogleFonts.poppins(
-                    color: GColors.darkgery,
-                    fontSize: 12,
-                  ),
-                ),
-                Spacer(),
-                Text(
-                  "360",
-                  style: GoogleFonts.poppins(
-                    color: GColors.darkgery,
-                    fontSize: 12,
-                  ),
-                ),
-              ],
-            ),
+
+            _priceRow("Cart Total", totalPrice),
             SizedBox(height: screenHeight * 0.01),
-            Row(
-              children: [
-                Text(
-                  "Shiping Charges",
-                  style: GoogleFonts.poppins(
-                    color: GColors.buttonPrimary,
-                    fontSize: 12,
-                  ),
-                ),
-                Spacer(),
-                Text(
-                  "50",
-                  style: GoogleFonts.poppins(
-                    color: GColors.darkgery,
-                    fontSize: 12,
-                  ),
-                ),
-              ],
-            ),
+
+            _priceRow("GST (18%)", gst),
             SizedBox(height: screenHeight * 0.01),
-            Divider(),
+
+            _priceRow("Shipping Charges", shippingCharges, isHighlighted: true),
             SizedBox(height: screenHeight * 0.01),
-            Row(
-              children: [
-                Text(
-                  "Total Price",
-                  style: GoogleFonts.poppins(
-                    color: GColors.black,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Spacer(),
-                Text(
-                  "4999",
-                  style: GoogleFonts.poppins(
-                    color: GColors.black,
-                    fontSize: 12,
-                  ),
-                ),
-              ],
-            ),
+
+            const Divider(),
             SizedBox(height: screenHeight * 0.01),
-            Row(
-              children: [
-                Text(
-                  "Cashback Earned",
-                  style: GoogleFonts.poppins(
-                    color: GColors.buttonPrimary,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Spacer(),
-                Text(
-                  "250",
-                  style: GoogleFonts.poppins(
-                    color: GColors.buttonPrimary,
-                    fontSize: 12,
-                  ),
-                ),
-              ],
+
+            _priceRow("Total Price", finalTotal, isBold: true, isBig: true),
+            SizedBox(height: screenHeight * 0.01),
+
+            _priceRow(
+              "Cashback Earned",
+              cashback,
+              isHighlighted: true,
+              isBold: true,
+              isBig: true,
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _priceRow(
+    String label,
+    double value, {
+    bool isBold = false,
+    bool isBig = false,
+    bool isHighlighted = false,
+  }) {
+    return Row(
+      children: [
+        Text(
+          label,
+          style: GoogleFonts.poppins(
+            fontSize: isBig ? 14 : 12,
+            fontWeight: isBold ? FontWeight.w500 : FontWeight.normal,
+            color:
+                isHighlighted
+                    ? GColors.buttonPrimary
+                    : GColors.darkgery, // Adjust spelling if needed
+          ),
+        ),
+        const Spacer(),
+        Text(
+          value.toStringAsFixed(2),
+          style: GoogleFonts.poppins(
+            fontSize: isBig ? 12 : 12,
+            fontWeight: isBold ? FontWeight.w500 : FontWeight.normal,
+            color:
+                isHighlighted
+                    ? GColors.buttonPrimary
+                    : GColors.darkgery, // Same here
+          ),
+        ),
+      ],
     );
   }
 }

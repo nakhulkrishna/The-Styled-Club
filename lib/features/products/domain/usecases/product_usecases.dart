@@ -73,4 +73,8 @@ class ProductUsecases {
     return repository.womenSharpDressingCategoryBasedProducts(categoryId, itemCategory);
   }
 
+Future<List<ProductEntity>> searchProducts(String query) {
+    return repository.searchProductsByName(query);
+  }
+
 }

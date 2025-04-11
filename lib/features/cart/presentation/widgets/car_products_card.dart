@@ -1,7 +1,10 @@
 import 'package:clothingstore/core/constants/colors.dart';
 import 'package:clothingstore/features/cart/data/models/cart_model.dart';
+import 'package:clothingstore/features/cart/presentation/bloc/cubit/cart_cubit.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 
@@ -11,11 +14,13 @@ class CartProductsCard extends StatelessWidget {
     required this.screenHeight,
     required this.screenWidth,
     required this.cartModel,
+    required this.index,
   });
 
   final double screenHeight;
   final double screenWidth;
   final CartModel cartModel;
+  final int index;
 
   @override
   Widget build(BuildContext context) {
@@ -32,10 +37,15 @@ class CartProductsCard extends StatelessWidget {
               Transform.scale(
                 scale: .8,
                 child: Checkbox(
-                  materialTapTargetSize: MaterialTapTargetSize.padded,
-                  value: true,
-                  onChanged: (value) {},
-                  fillColor: WidgetStatePropertyAll(GColors.buttonPrimary),
+                  value: cartModel.isSelected,
+                  onChanged: (value) {
+                    context.read<FetchCartItemsCubit>().toggleSelection(
+                      index,
+                    ); // Pass index
+                  },
+                  fillColor: const WidgetStatePropertyAll(
+                    GColors.buttonPrimary,
+                  ),
                 ),
               ),
               Padding(
@@ -71,93 +81,94 @@ class CartProductsCard extends StatelessWidget {
                         fontWeight: FontWeight.w400,
                       ),
                     ),
-                    SizedBox(
-                      height: screenHeight * 0.1,
-                      child: Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              showModalBottomSheet(
-                                context: context,
-                                shape: RoundedRectangleBorder(),
-                                builder: (context) {
-                                  return BottomSheet(
-                                    buttonLabel: "",
-                                    isquanity: false,
-                                    isNotShoes: true,
-                                    screenWidth: screenWidth,
-                                    screenHeight: screenHeight,
-                                  );
-                                },
-                              );
-                            },
-                            child: Container(
-                              width: screenWidth * 0.25,
-                              height: screenHeight * 0.04,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(2),
-                                border: Border.all(color: GColors.darkgery),
-                              ),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text("Size :", style: GoogleFonts.poppins()),
-                                  SizedBox(width: screenWidth * 0.01),
-                                  Text(
-                                    cartModel.selectedVariation?['Size'] ??
-                                        'Not selected',
-                                    style: GoogleFonts.poppins(),
-                                  ),
-                                  SizedBox(width: screenWidth * 0.02),
-                                  Icon(Iconsax.arrow_down_24, size: 15),
-                                ],
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: screenWidth * 0.03),
-                          GestureDetector(
-                            onTap: () {
-                              showModalBottomSheet(
-                                context: context,
-                                shape: RoundedRectangleBorder(),
-                                builder: (context) {
-                                  return BottomSheet(
-                                    buttonLabel: "",
-                                    isquanity: true,
-                                    screenWidth: screenWidth,
-                                    screenHeight: screenHeight,
-                                  );
-                                },
-                              );
-                            },
-                            child: Container(
-                              width: screenWidth * 0.2,
-                              height: screenHeight * 0.04,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(2),
-                                border: Border.all(color: GColors.darkgery),
-                              ),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text("Qty :", style: GoogleFonts.poppins()),
-                                  SizedBox(width: screenWidth * 0.01),
-                                  Text(
-                                    cartModel.selectedVariation?['quantity'] ??
-                                        '1',
-                                    style: GoogleFonts.poppins(),
-                                  ),
-                                  SizedBox(width: screenWidth * 0.02),
-                                  Icon(Iconsax.arrow_down_24, size: 15),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                    SizedBox(height: screenHeight * .1),
+                    // SizedBox(
+                    //   height: screenHeight * 0.1,
+                    //   child: Row(
+                    //     children: [
+                    //       GestureDetector(
+                    //         onTap: () {
+                    //           showModalBottomSheet(
+                    //             context: context,
+                    //             shape: RoundedRectangleBorder(),
+                    //             builder: (context) {
+                    //               return BottomSheet(
+                    //                 buttonLabel: "",
+                    //                 isquanity: false,
+                    //                 isNotShoes: true,
+                    //                 screenWidth: screenWidth,
+                    //                 screenHeight: screenHeight,
+                    //               );
+                    //             },
+                    //           );
+                    //         },
+                    //         child: Container(
+                    //           width: screenWidth * 0.25,
+                    //           height: screenHeight * 0.04,
+                    //           decoration: BoxDecoration(
+                    //             borderRadius: BorderRadius.circular(2),
+                    //             border: Border.all(color: GColors.darkgery),
+                    //           ),
+                    //           child: Row(
+                    //             crossAxisAlignment: CrossAxisAlignment.center,
+                    //             mainAxisAlignment: MainAxisAlignment.center,
+                    //             children: [
+                    //               Text("Size :", style: GoogleFonts.poppins()),
+                    //               SizedBox(width: screenWidth * 0.01),
+                    //               Text(
+                    //                 cartModel.selectedVariation?['Size'] ??
+                    //                     'Not selected',
+                    //                 style: GoogleFonts.poppins(),
+                    //               ),
+                    //               SizedBox(width: screenWidth * 0.02),
+                    //               Icon(Iconsax.arrow_down_24, size: 15),
+                    //             ],
+                    //           ),
+                    //         ),
+                    //       ),
+                    //       SizedBox(width: screenWidth * 0.03),
+                    //       GestureDetector(
+                    //         onTap: () {
+                    //           showModalBottomSheet(
+                    //             context: context,
+                    //             shape: RoundedRectangleBorder(),
+                    //             builder: (context) {
+                    //               return BottomSheet(
+                    //                 buttonLabel: "",
+                    //                 isquanity: true,
+                    //                 screenWidth: screenWidth,
+                    //                 screenHeight: screenHeight,
+                    //               );
+                    //             },
+                    //           );
+                    //         },
+                    //         child: Container(
+                    //           width: screenWidth * 0.2,
+                    //           height: screenHeight * 0.04,
+                    //           decoration: BoxDecoration(
+                    //             borderRadius: BorderRadius.circular(2),
+                    //             border: Border.all(color: GColors.darkgery),
+                    //           ),
+                    //           child: Row(
+                    //             crossAxisAlignment: CrossAxisAlignment.center,
+                    //             mainAxisAlignment: MainAxisAlignment.center,
+                    //             children: [
+                    //               Text("Qty :", style: GoogleFonts.poppins()),
+                    //               SizedBox(width: screenWidth * 0.01),
+                    //               Text(
+                    //                 cartModel.selectedVariation?['quantity'] ??
+                    //                     '1',
+                    //                 style: GoogleFonts.poppins(),
+                    //               ),
+                    //               SizedBox(width: screenWidth * 0.02),
+                    //               Icon(Iconsax.arrow_down_24, size: 15),
+                    //             ],
+                    //           ),
+                    //         ),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
                     Text(
                       cartModel.price.toString(),
                       style: GoogleFonts.poppins(
@@ -185,7 +196,14 @@ class CartProductsCard extends StatelessWidget {
             ),
             child: Center(
               child: TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  final userId = FirebaseAuth.instance.currentUser!.uid;
+                  context.read<FetchCartItemsCubit>().deleteItem(
+                    userId,
+                    cartModel.productId,
+                  );
+                  context.read<FetchCartItemsCubit>().getFecthItems(userId);
+                },
                 child: Text("REMOVE", style: GoogleFonts.poppins()),
               ),
             ),

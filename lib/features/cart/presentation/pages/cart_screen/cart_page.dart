@@ -1,6 +1,5 @@
 import 'package:clothingstore/core/constants/colors.dart';
 import 'package:clothingstore/common/widgets/discountbanner.dart';
-
 import 'package:clothingstore/common/widgets/product_card.dart';
 import 'package:clothingstore/features/cart/presentation/bloc/cubit/cart_cubit.dart';
 import 'package:clothingstore/features/cart/presentation/bloc/cubit/cart_state.dart';
@@ -8,11 +7,11 @@ import 'package:clothingstore/features/cart/presentation/widgets/car_products_ca
 import 'package:clothingstore/features/cart/presentation/widgets/cart_bottom_bar.dart';
 import 'package:clothingstore/features/cart/presentation/widgets/final_price_data.dart';
 import 'package:clothingstore/features/cart/presentation/widgets/items_count.dart';
+import 'package:clothingstore/features/profile/data/model/user_model.dart';
 import 'package:clothingstore/features/profile/presentation/bloc/cubit/address_cubit.dart';
 import 'package:clothingstore/features/profile/presentation/bloc/cubit/address_state.dart';
-
 import 'package:clothingstore/features/profile/presentation/pages/addresPages/pages/address_page.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -23,11 +22,14 @@ class CartPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser!.uid;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<FetchCartItemsCubit>().getFecthItems(user);
+    });
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
-      //* bottom bar
-      bottomNavigationBar: CartBottomBar(screenHeight: screenHeight),
       appBar: AppBar(
         centerTitle: true,
         title: Text(
@@ -35,104 +37,111 @@ class CartPage extends StatelessWidget {
           style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w500),
         ),
       ),
-      body: SingleChildScrollView(
-        physics: BouncingScrollPhysics().applyTo(ClampingScrollPhysics()),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            DiscountBanner(
-              screenWidth: screenWidth,
-              screenHeight: screenHeight,
-            ),
+      body: BlocBuilder<DeliveryCubit, DeliveryState>(
+        builder: (context, deliveryState) {
+          AddressModel? selectedAddressId;
 
-            UserAddressSelector(
-              screenHeight: screenHeight,
-              screenWidth: screenWidth,
-            ),
-            ItesmCount(),
+          if (deliveryState is DeliveryLoaded) {
+            selectedAddressId = deliveryState.selectedAddressModel;
+          }
 
-            Divider(color: GColors.gery),
-
-            BlocBuilder<FetchCartItemsCubit, FetchCartState>(
-              builder: (context, state) {
-                if (state is FetchCartLoading) {
-                  return SizedBox.shrink();
-                } else if (state is FetchCartLoaded) {
-                  return SizedBox(
-                    height: screenHeight * 0.9,
-                    child: ListView.builder(
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: state.cartItem.length,
-                      itemBuilder: (context, index) {
-                        return CartProductsCard(
-                          cartModel: state.cartItem[index],
-                          screenHeight: screenHeight,
-                          screenWidth: screenWidth,
-                        );
+          return Stack(
+            children: [
+              SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                padding: EdgeInsets.only(bottom: screenHeight * 0.1),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    DiscountBanner(
+                      screenWidth: screenWidth,
+                      screenHeight: screenHeight,
+                    ),
+                    UserAddressSelector(
+                      screenHeight: screenHeight,
+                      screenWidth: screenWidth,
+                    ),
+                    const ItesmCount(),
+                    const Divider(color: GColors.gery),
+                    BlocBuilder<FetchCartItemsCubit, FetchCartState>(
+                      builder: (context, state) {
+                        if (state is FetchCartLoaded) {
+                          return ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: state.cartItem.length,
+                            itemBuilder:
+                                (context, index) => CartProductsCard(
+                                  index: index,
+                                  cartModel: state.cartItem[index],
+                                  screenHeight: screenHeight,
+                                  screenWidth: screenWidth,
+                                ),
+                          );
+                        } else {
+                          return const SizedBox.shrink();
+                        }
                       },
                     ),
-                  );
-                } else if (state is FetchCartError) {
-                  return SizedBox.shrink();
-                } else {
-                  return SizedBox.shrink();
-                }
-              },
-            ),
-            SizedBox(height: screenHeight * 0.01),
+                    SizedBox(height: screenHeight * 0.02),
+                    // CouponAndGift(
+                    //   screenHeight: screenHeight,
+                    //   screenWidth: screenWidth,
+                    //   iconData: Iconsax.tag,
+                    //   hint: "Enter Coupon Code",
+                    //   suffix: 'APPLY',
+                    //   title: "Apply Coupon",
+                    // ),
+                    // SizedBox(height: screenHeight * 0.01),
+                    // CouponAndGift(
+                    //   screenHeight: screenHeight,
+                    //   screenWidth: screenWidth,
+                    //   iconData: Iconsax.tag,
+                    //   hint: "Enter Gift Voucher Code",
+                    //   suffix: 'APPLY',
+                    //   title: "Gift Voucher",
+                    // ),
+                    BlocBuilder<FetchCartItemsCubit, FetchCartState>(
+                      builder: (context, state) {
+                        if (state is FetchCartLoaded) {
+                          final itemCount = state.cartItem.length;
+                          final totalPrice = state.cartItem.fold(
+                            0.0,
+                            (sum, item) =>
+                                item.isSelected ? sum + item.price : sum,
+                          );
 
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.02),
-              child: Text("YOU MAY ALSO LIKE", style: GoogleFonts.poppins()),
-            ),
-            SizedBox(height: screenHeight * 0.01),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
-              child: SizedBox(
-                height: screenHeight * 0.3,
-
-                child: ListView.builder(
-                  itemCount: 3,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    return ProductCard(
-                      brand: "",
-                      image: "",
-                      price: "",
-                      title: '',
-                      screenWidth: screenWidth * 0.3,
-                      screenHeight: screenHeight * 0.15,
-                    );
-                  },
+                          return FinalPriceData(
+                            itemcount: itemCount,
+                            screenHeight: screenHeight,
+                            screenWidth: screenWidth,
+                            totalPrice: totalPrice,
+                          );
+                        } else {
+                          return FinalPriceData(
+                            itemcount: 0,
+                            screenHeight: screenHeight,
+                            screenWidth: screenWidth,
+                            totalPrice: 0.0,
+                          );
+                        }
+                      },
+                    ),
+                  ],
                 ),
               ),
-            ),
-            Divider(thickness: 5, color: GColors.gery),
-            SizedBox(height: screenHeight * 0.01),
-            CouponAndGift(
-              screenHeight: screenHeight,
-              screenWidth: screenWidth,
-              iconData: Iconsax.tag,
-              hint: "Enter Coupon Code",
-              suffix: 'APPLY',
-              title: "Apply Coupon",
-            ),
-            SizedBox(height: screenHeight * 0.01),
-            CouponAndGift(
-              screenHeight: screenHeight,
-              screenWidth: screenWidth,
-              iconData: Iconsax.tag,
-              hint: "Enter Gift Voucher Code",
-              suffix: 'APPLY',
-              title: "Gift Voucher",
-            ),
-            SizedBox(height: screenHeight * 0.01),
-            FinalPriceData(
-              screenHeight: screenHeight,
-              screenWidth: screenWidth,
-            ),
-          ],
-        ),
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: CartBottomBar(
+                  screenHeight: screenHeight,
+                  selectedAddressId: selectedAddressId,
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
@@ -155,18 +164,19 @@ class CouponAndGift extends StatelessWidget {
   final String title;
   final String hint;
   final String suffix;
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         border: Border(bottom: BorderSide(color: GColors.gery)),
       ),
       height: screenHeight * .18,
       width: screenWidth,
-
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: screenHeight * 0.02),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
@@ -183,24 +193,19 @@ class CouponAndGift extends StatelessWidget {
             ),
             SizedBox(height: screenHeight * .04),
             TextField(
-              onTap: () {
-                // cubit.showKeyboard();
-              },
-              // focusNode: cubit.focusNode,
-              // controller: cubit.pincodeController,
               style: GoogleFonts.poppins(color: GColors.darkergray),
               decoration: InputDecoration(
                 suffixText: suffix,
                 suffixStyle: GoogleFonts.poppins(color: Colors.teal),
                 hintText: hint,
                 hintStyle: GoogleFonts.poppins(color: GColors.darkgery),
-                enabledBorder: OutlineInputBorder(
+                enabledBorder: const OutlineInputBorder(
                   borderSide: BorderSide(width: 1, color: GColors.gery),
                 ),
-                focusedBorder: OutlineInputBorder(
+                focusedBorder: const OutlineInputBorder(
                   borderSide: BorderSide(width: 1, color: GColors.gery),
                 ),
-                border: OutlineInputBorder(
+                border: const OutlineInputBorder(
                   borderSide: BorderSide(width: 1, color: GColors.gery),
                 ),
               ),
@@ -242,9 +247,8 @@ class UserAddressSelector extends StatelessWidget {
             );
           }
 
-          // If no address is selected, select the first one by default (with non-null id)
           final firstValidAddress = addresses.firstWhere(
-            (address) => address.id != null,
+            (a) => a.id != null,
             orElse: () => addresses.first,
           );
 
@@ -268,14 +272,13 @@ class UserAddressSelector extends StatelessWidget {
                     ),
                     const Spacer(),
                     TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => AddressPage(),
+                      onPressed:
+                          () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AddressPage(),
+                            ),
                           ),
-                        );
-                      },
                       child: Text(
                         "Add Address",
                         style: GoogleFonts.poppins(
@@ -287,29 +290,32 @@ class UserAddressSelector extends StatelessWidget {
                     ),
                   ],
                 ),
-                ...addresses.where((address) => address.id != null).map((
-                  address,
-                ) {
-                  return RadioListTile<String>(
-                    contentPadding: EdgeInsets.zero,
-                    value: address.id!,
-                    groupValue: selectedId,
-                    onChanged: (value) {
-                      context.read<DeliveryCubit>().selectAddress(value!);
-                    },
-                    title: Text(
-                      address.addressType,
-                      style: GoogleFonts.poppins(fontWeight: FontWeight.w500),
-                    ),
-                    subtitle: Text(
-                      "${address.flat}, ${address.street} (${address.pincode}), ${address.landmark}, ${address.city}, ${address.state} ${address.phone}",
-                      style: GoogleFonts.poppins(
-                        fontSize: 12,
-                        color: GColors.darkgery,
+                ...addresses
+                    .where((a) => a.id != null)
+                    .map(
+                      (address) => RadioListTile<String>(
+                        contentPadding: EdgeInsets.zero,
+                        value: address.id!,
+                        groupValue: selectedId,
+                        onChanged:
+                            (value) => context
+                                .read<DeliveryCubit>()
+                                .selectAddress(value!),
+                        title: Text(
+                          address.addressType,
+                          style: GoogleFonts.poppins(
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        subtitle: Text(
+                          "${address.flat}, ${address.street} (${address.pincode}), ${address.landmark}, ${address.city}, ${address.state} ${address.phone}",
+                          style: GoogleFonts.poppins(
+                            fontSize: 12,
+                            color: GColors.darkgery,
+                          ),
+                        ),
                       ),
                     ),
-                  );
-                }),
               ],
             ),
           );

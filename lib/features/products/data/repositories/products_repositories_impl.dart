@@ -4,11 +4,9 @@ import 'package:clothingstore/features/products/domain/repositories/product_repo
 
 // Implementation of the ProductRepositories interface
 class ProductsRepositoriesImpl implements ProductRepositories {
-
   // Remote data source to fetch product data
   ProductRemoteDataSources productRemoteDataSources;
 
-  
   ProductsRepositoriesImpl({required this.productRemoteDataSources});
 
   //===========================MEN=============================/
@@ -18,7 +16,6 @@ class ProductsRepositoriesImpl implements ProductRepositories {
     return modelList.map((e) => e.toEntity()).toList();
   }
 
-  
   @override
   Future<List<ProductEntity>> menTopPicksProducts() async {
     final modelList = await productRemoteDataSources.getMenTopPicks();
@@ -54,14 +51,15 @@ class ProductsRepositoriesImpl implements ProductRepositories {
     String categoryid,
     String itemCategory,
   ) async {
-    final modelList = await productRemoteDataSources.getMenSharpDressingProducts(
-      categoryId: categoryid,
-      itemCategory: itemCategory,
-    );
+    final modelList = await productRemoteDataSources
+        .getMenSharpDressingProducts(
+          categoryId: categoryid,
+          itemCategory: itemCategory,
+        );
     return modelList.map((e) => e.toEntity()).toList();
   }
 
-    //===========================WOMEN=============================/
+  //===========================WOMEN=============================/
   @override
   Future<List<ProductEntity>> womenProducts() async {
     final modelList = await productRemoteDataSources.getMenNewArrivals();
@@ -91,10 +89,11 @@ class ProductsRepositoriesImpl implements ProductRepositories {
     String categoryid,
     String itemCategory,
   ) async {
-    final modelList = await productRemoteDataSources.getWomenMinimalStyleProducts(
-      categoryId: categoryid,
-      itemCategory: itemCategory,
-    );
+    final modelList = await productRemoteDataSources
+        .getWomenMinimalStyleProducts(
+          categoryId: categoryid,
+          itemCategory: itemCategory,
+        );
     return modelList.map((e) => e.toEntity()).toList();
   }
 
@@ -110,4 +109,11 @@ class ProductsRepositoriesImpl implements ProductRepositories {
         );
     return modelList.map((e) => e.toEntity()).toList();
   }
+
+  @override
+  Future<List<ProductEntity>> searchProductsByName(String query) async {
+    final modelList = await productRemoteDataSources.searchProducts(query);
+    return modelList.map((e) => e.toEntity()).toList();
+  }
+
 }

@@ -221,4 +221,20 @@ class WomenSharpDressingCategoryBasedCubit
   }
 }
 
+class SearchCubit extends Cubit<ProductState> {
+  final ProductUsecases usecases;
+
+  SearchCubit(this.usecases) : super(ProductInitial());
+
+  Future<void> searchProducts(String query) async {
+    emit(ProductLoading());
+    try {
+      final results = await usecases.searchProducts(query); // <-- You’ll define this in usecase
+      emit(ProductLoaded(results));
+    } catch (e) {
+      emit(ProductError(e.toString()));
+    }
+  }
+}
+
 

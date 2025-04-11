@@ -30,4 +30,6 @@ abstract class ProductRepositories {
     String categoryId,
     String itemCategory,
   );
+  Future<List<ProductEntity>> searchProductsByName(String query);
+
 }

@@ -11,6 +11,10 @@ import 'package:clothingstore/features/home/data/datasources/banner/banner_romot
 import 'package:clothingstore/features/home/data/repositories/banner/banner_repositories_impl.dart';
 import 'package:clothingstore/features/home/domain/usecases/banner/get_banner_usecases.dart';
 import 'package:clothingstore/features/home/presentation/bloc/banner/banner_cubit.dart';
+import 'package:clothingstore/features/order/data/data_sources/order_remote_data_source.dart';
+import 'package:clothingstore/features/order/data/repositories/order_repository_impl.dart';
+import 'package:clothingstore/features/order/domain/repositories/order_repository.dart';
+import 'package:clothingstore/features/order/presentation/bloc/cubit/order_cubit.dart';
 import 'package:clothingstore/features/products/data/data_sources/categories_remote_data_sources.dart';
 import 'package:clothingstore/features/products/data/data_sources/product_remote_data_sources.dart';
 import 'package:clothingstore/features/products/data/repositories/categories_repositories_impl.dart';
@@ -302,6 +306,26 @@ class MyApp extends StatelessWidget {
                   ),
                 ),
           ),
+          BlocProvider(
+            create:
+                (context) => SearchCubit(
+                  ProductUsecases(
+                    ProductsRepositoriesImpl(
+                      productRemoteDataSources: ProductRemoteDataSources(
+                        firestore: FirebaseFirestore.instance,
+                      ),
+                    ),
+                  ),
+                ),
+          ),
+          BlocProvider(
+            create:
+                (context) => OrderCubit(
+                  orderRepository: OrderRepositoryImpl(
+                    orderRemoteDataSource: OrderRemoteDataSource(),
+                  ),
+                ),
+          ),
         ],
         child: MaterialApp.router(
           debugShowCheckedModeBanner: false,
@@ -323,7 +347,7 @@ class MyApp extends StatelessWidget {
               ),
               behavior: SnackBarBehavior.floating,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(50),
+                borderRadius: BorderRadius.circular(100),
               ),
             ),
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),

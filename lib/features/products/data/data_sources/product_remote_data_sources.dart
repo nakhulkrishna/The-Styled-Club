@@ -23,6 +23,20 @@ class ProductRemoteDataSources {
     return snapshot.docs.map((doc) => ProductModel.fromSnapshot(doc)).toList();
   }
 
+  Future<List<ProductModel>> searchProducts(String query) async {
+    if (query.trim().isEmpty) return [];
+
+    final snapshot = await firestore.collection("Products").limit(20).get();
+
+    return snapshot.docs
+        .map((doc) => ProductModel.fromSnapshot(doc))
+        .where(
+          (product) =>
+              product.title.toLowerCase().contains(query.toLowerCase()),
+        )
+        .toList();
+  }
+
   Future<List<ProductModel>> getMenProductsByCategory({
     required String categoryId,
     required String itemCategory,

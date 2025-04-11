@@ -9,112 +9,58 @@ class ItesmCount extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Transform.scale(
-          scale: .8,
-          child: Checkbox(
-            materialTapTargetSize: MaterialTapTargetSize.padded,
-            value: true,
-            onChanged: (value) {},
-            fillColor: WidgetStatePropertyAll(GColors.buttonPrimary),
-          ),
-        ),
-        BlocBuilder<FetchCartItemsCubit, FetchCartState>(
-          builder: (context, state) {
-            if (state is FetchCartLoading) {
-              return RichText(
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text: "",
-                      style: TextStyle(fontSize: 12, color: Colors.black),
-                    ),
-                    TextSpan(
-                      text: "",
-                      style: TextStyle(fontSize: 12, color: Colors.black),
-                    ),
-                    TextSpan(
-                      text: "",
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: GColors.buttonPrimary,
-                      ),
-                    ),
-                  ],
+    return BlocBuilder<FetchCartItemsCubit, FetchCartState>(
+      builder: (context, state) {
+        if (state is FetchCartLoaded) {
+          final selectedCount =
+              state.cartItem.where((item) => item.isSelected).length;
+          final totalCount = state.cartItem.length;
+          final totalPrice = state.cartItem
+              .where((item) => item.isSelected)
+              .fold(0.0, (sum, item) => sum + (item.price * item.quantity));
+
+          return Row(
+            children: [
+              Transform.scale(
+                scale: .8,
+                child: Checkbox(
+                  value: selectedCount == totalCount,
+                  onChanged: (value) {
+                    context.read<FetchCartItemsCubit>().selectAll(value!);
+                  },
+                  fillColor: const WidgetStatePropertyAll(
+                    GColors.buttonPrimary,
+                  
+                  ),
                 ),
-              );
-            } else if (state is FetchCartLoaded) {
-              
-              return RichText(
+              ),
+              RichText(
                 text: TextSpan(
                   children: [
                     TextSpan(
-                      text: "3 / ${state.cartItem.length} ",
-                      style: TextStyle(fontSize: 12, color: Colors.black),
+                      text: "$selectedCount / $totalCount ",
+                      style: const TextStyle(fontSize: 12, color: Colors.black),
                     ),
-                    TextSpan(
+                    const TextSpan(
                       text: "ITEMS SELECTED ",
                       style: TextStyle(fontSize: 12, color: Colors.black),
                     ),
                     TextSpan(
-                      text: "(2889)",
-                      style: TextStyle(
+                      text: "(${totalPrice})", // Example total price logic
+                      style: const TextStyle(
                         fontSize: 12,
                         color: GColors.buttonPrimary,
                       ),
                     ),
                   ],
                 ),
-              );
-            } else if (state is FetchCartError) {
-              return RichText(
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text: "2/2 ",
-                      style: TextStyle(fontSize: 12, color: Colors.black),
-                    ),
-                    TextSpan(
-                      text: "ITEMS SELECTED ",
-                      style: TextStyle(fontSize: 12, color: Colors.black),
-                    ),
-                    TextSpan(
-                      text: "(2889)",
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: GColors.buttonPrimary,
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            } else {
-              return RichText(
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text: "2/2 ",
-                      style: TextStyle(fontSize: 12, color: Colors.black),
-                    ),
-                    TextSpan(
-                      text: "ITEMS SELECTED ",
-                      style: TextStyle(fontSize: 12, color: Colors.black),
-                    ),
-                    TextSpan(
-                      text: "(2889)",
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: GColors.buttonPrimary,
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            }
-          },
-        ),
-      ],
+              ),
+            ],
+          );
+        } else {
+          return const SizedBox.shrink();
+        }
+      },
     );
   }
 }

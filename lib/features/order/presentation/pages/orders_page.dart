@@ -1,6 +1,12 @@
+import 'dart:developer';
+
 import 'package:clothingstore/core/constants/colors.dart';
+import 'package:clothingstore/features/cart/presentation/bloc/cubit/cart_cubit.dart';
+import 'package:clothingstore/features/order/presentation/bloc/cubit/order_cubit.dart';
+import 'package:clothingstore/features/order/presentation/bloc/cubit/order_state.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 
@@ -9,6 +15,7 @@ class OrdersPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<OrderCubit>().loadAllOrders();
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
     return DefaultTabController(
@@ -44,138 +51,153 @@ class OrdersPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      height: screenHeight * .03,
-                      width: screenWidth,
-                      child: Text(
-                        "ORDERID#",
-                        style: GoogleFonts.poppins(fontWeight: FontWeight.w700),
-                      ),
-                    ),
-                    DottedLine(
-                      dashLength: 6.0,
-                      dashColor: GColors.darkgery, // Color of the dashes
-                      lineThickness: 2.0,
-                    ),
-                    ListView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: 10, // Define the number of items
-                      itemBuilder: (context, index) {
-                        return Container(
-                          height: screenHeight * .35,
-                          width: screenWidth,
+                    BlocBuilder<OrderCubit, OrderState>(
+                      builder: (context, state) {
+                        if (state is OrderFetched) {
+                          final orders = state.orders;
 
-                          decoration: BoxDecoration(
-                            border: Border(
-                              bottom: BorderSide(color: GColors.darkergray),
-                            ),
-                          ),
-                          margin: EdgeInsets.symmetric(vertical: 5),
-                          child: Column(
-                            children: [
-                              SizedBox(
-                                height: screenHeight * .08,
-                                width: screenWidth,
+                          return ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: orders.length,
+                            itemBuilder: (context, orderIndex) {
+                              final orderData = orders[orderIndex];
 
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Icon(
-                                      size: screenHeight * .045,
-                                      Iconsax.close_circle,
-                                      color: GColors.darkergray,
-                                    ),
-                                    SizedBox(width: screenWidth * .02),
-                                    Column(
-                                      children: [
-                                        Text(
-                                          "Order Cancelled",
-                                          style: GoogleFonts.poppins(
-                                            color: GColors.darkergray,
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                        Text(
-                                          "On 22 Mar,2025",
-                                          style: GoogleFonts.poppins(
-                                            color: GColors.darkergray,
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Row(
+                              return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Container(
-                                    height: screenHeight * .2,
-                                    width: screenWidth * 0.3,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      color: Colors.amberAccent,
+                                  Text(
+                                    "ORDERID# ${orderData.id}",
+                                    style: GoogleFonts.poppins(
+                                      fontWeight: FontWeight.w700,
                                     ),
                                   ),
-                                  SizedBox(width: screenWidth * .05),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                  const SizedBox(height: 8),
+                                  DottedLine(dashLength: 6, lineThickness: 1),
+                                  const SizedBox(height: 8),
+
+                                  // Order Date
+                                  Row(
                                     children: [
-                                      SizedBox(height: screenWidth * .015),
-                                      Text(
-                                        "Products Name",
-                                        style: GoogleFonts.poppins(
-                                          color: GColors.darkergray,
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                      SizedBox(height: screenWidth * .02),
-                                      Text(
-                                        "Material of cloth",
-                                        style: GoogleFonts.poppins(
-                                          color: GColors.darkergray,
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
-                                      SizedBox(height: screenWidth * .02),
-                                      Row(
+                                      const Icon(Iconsax.box),
+                                      const SizedBox(width: 8),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            "Size : S",
+                                            "Order Date",
                                             style: GoogleFonts.poppins(
-                                              color: GColors.darkergray,
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w400,
+                                              fontSize: 14,
                                             ),
                                           ),
-                                          SizedBox(width: screenWidth * .05),
                                           Text(
-                                            "Qty : 2",
+                                            orderData.formattedOrderDate,
                                             style: GoogleFonts.poppins(
-                                              color: GColors.darkergray,
                                               fontSize: 12,
-                                              fontWeight: FontWeight.w400,
                                             ),
                                           ),
                                         ],
                                       ),
                                     ],
                                   ),
+
+                                  const SizedBox(height: 10),
+
+                                  // Loop through items in the order
+                                  ListView.builder(
+                                    shrinkWrap: true,
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    itemCount: orderData.items.length,
+                                    itemBuilder: (context, itemIndex) {
+                                      final item = orderData.items[itemIndex];
+
+                                      return Container(
+                                        margin: const EdgeInsets.symmetric(
+                                          vertical: 8,
+                                        ),
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            // Image
+                                            Container(
+                                              height: 100,
+                                              width: 80,
+                                              decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                  image: NetworkImage(
+                                                    item.image!,
+                                                  ),
+                                                  fit: BoxFit.cover,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                              ),
+                                            ),
+                                            const SizedBox(width: 12),
+
+                                            // Details
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    item.title,
+                                                    style: GoogleFonts.poppins(
+                                                      fontSize: 14,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    item.brandName!,
+                                                    style: GoogleFonts.poppins(
+                                                      fontSize: 12,
+                                                      color: Colors.grey,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(height: 6),
+                                                  Text(
+                                                    "Size: ${item.selectedVariation?['Size'] ?? 'N/A'}",
+                                                    style: GoogleFonts.poppins(
+                                                      fontSize: 12,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    "Qty: ${item.quantity}",
+                                                    style: GoogleFonts.poppins(
+                                                      fontSize: 12,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    "Price: ₹${item.price}",
+                                                    style: GoogleFonts.poppins(
+                                                      fontSize: 12,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  ),
                                 ],
-                              ),
-                            ],
-                          ),
-                        );
+                              );
+                            },
+                          );
+                        } else if (state is OrderLoading) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        } else {
+                          return const Center(child: Text("No orders found."));
+                        }
                       },
                     ),
+
                   ],
                 ),
               ),

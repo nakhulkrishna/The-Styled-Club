@@ -12,4 +12,10 @@ class CartUsecases {
    Future<List<CartModel>> getCartItems(String userId,) {
     return cartRepository.getCartItems(userId);
   }
+
+
+Future<void> deleteCartItem(String userId, String productId) {
+    return cartRepository.deleteCartItem(userId, productId);
+  }
+
 }

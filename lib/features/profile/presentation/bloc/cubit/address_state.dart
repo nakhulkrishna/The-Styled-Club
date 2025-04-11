@@ -42,4 +42,14 @@ class DeliveryLoaded extends DeliveryState {
       selectedAddressId: selectedAddressId ?? this.selectedAddressId,
     );
   }
+
+  AddressModel? get selectedAddressModel {
+    if (selectedAddressId == null) return null;
+    try {
+      return addresses.firstWhere((address) => address.id == selectedAddressId);
+    } catch (_) {
+      return null;
+    }
+  }
+
 }
