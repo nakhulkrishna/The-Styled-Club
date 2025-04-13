@@ -7,11 +7,10 @@ class UserProfileModel {
   final String lastName;
   final String phone;
   final String email;
-  final String dateofbirth;
 
   UserProfileModel({
-   required this.email,
-   required this.dateofbirth,
+    required this.email,
+
     required this.uid,
     required this.firstName,
     required this.lastName,
@@ -25,15 +24,13 @@ class UserProfileModel {
       'firstName': firstName,
       'lastName': lastName,
       'phone': phone,
-      'email':email,
-      'dateofbirth':dateofbirth
+      'email': email,
     };
   }
 
   // Create a UserProfileModel object from a Firestore document snapshot
   factory UserProfileModel.fromMap(Map<String, dynamic> map) {
     return UserProfileModel(
-      dateofbirth: map['dateofbirth'] ?? '',
       email: map['email'] ?? '',
       uid: map['uid'] ?? '',
       firstName: map['firstName'] ?? '',

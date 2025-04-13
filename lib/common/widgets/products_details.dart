@@ -45,7 +45,7 @@ class ProductsDetails extends StatelessWidget {
 
           // Product Title and Price Details
           Text(
-            productEntity.id,
+            productEntity.title,
             style: GoogleFonts.poppins(
               fontSize: 13,
               fontWeight: FontWeight.w500,

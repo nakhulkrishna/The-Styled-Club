@@ -1,9 +1,11 @@
 import 'package:clothingstore/core/constants/colors.dart';
 import 'package:clothingstore/features/products/presentation/bloc/categories/categorie_cubit.dart';
 import 'package:clothingstore/features/products/presentation/bloc/categories/categorie_state.dart';
+import 'package:clothingstore/features/products/presentation/pages/single_product/single_product_view.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class WomenCategorysGridList extends StatelessWidget {
   const WomenCategorysGridList({
@@ -69,7 +71,15 @@ class WomenCategorysGridList extends StatelessWidget {
                 return Padding(
                   padding: const EdgeInsets.only(left: 8, bottom: 5),
                   child: GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      context.pushNamed(
+                        'categoryProducts',
+                        pathParameters: {
+                          'categoryId': categories.name,
+                          'itemCategory': categories.itemCategory,
+                        },
+                      );
+                    },
                     child: Container(
                       decoration: BoxDecoration(
                         color: GColors.light,
@@ -110,7 +120,6 @@ class WomenCategorysGridList extends StatelessWidget {
                         color: GColors.light,
                         borderRadius: BorderRadius.circular(6),
                       ),
-                      
                     ),
                   ),
                 );
@@ -139,7 +148,6 @@ class WomenCategorysGridList extends StatelessWidget {
                         color: GColors.light,
                         borderRadius: BorderRadius.circular(6),
                       ),
-                   
                     ),
                   ),
                 );

@@ -24,10 +24,13 @@ import 'package:clothingstore/features/products/domain/usecases/product_usecases
 import 'package:clothingstore/features/products/presentation/bloc/categories/categorie_cubit.dart';
 import 'package:clothingstore/features/products/presentation/bloc/product/product_cubit.dart';
 import 'package:clothingstore/features/profile/data/datasource/delivery_address_remote_source.dart';
+import 'package:clothingstore/features/profile/data/datasource/user_profile_remote_source.dart';
 import 'package:clothingstore/features/profile/data/repositories/delivery_addresss_repository_impl.dart';
 import 'package:clothingstore/features/profile/domain/repositories/delivery_repository.dart';
 import 'package:clothingstore/features/profile/domain/usecases/delivery_usecases.dart';
+import 'package:clothingstore/features/profile/presentation/bloc/UserProfilecubit/user_profile_cubit.dart';
 import 'package:clothingstore/features/profile/presentation/bloc/cubit/address_cubit.dart';
+import 'package:clothingstore/features/profile/presentation/pages/profile_add_update/pages/profile_data_pages.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -325,6 +328,14 @@ class MyApp extends StatelessWidget {
                     orderRemoteDataSource: OrderRemoteDataSource(),
                   ),
                 ),
+          ),
+
+          BlocProvider(
+            create:
+                (context) =>
+                    UserProfileCubit(UserProfileRemoteSource())
+                      ..fetchUserProfile(),
+            child: ProfileDataPages(),
           ),
         ],
         child: MaterialApp.router(

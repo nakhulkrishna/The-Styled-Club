@@ -4,6 +4,7 @@ import 'package:clothingstore/features/products/presentation/bloc/categories/cat
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class WomenMinimalStyleCategorieList extends StatelessWidget {
   const WomenMinimalStyleCategorieList({
@@ -72,7 +73,15 @@ class WomenMinimalStyleCategorieList extends StatelessWidget {
                 return Padding(
                   padding: const EdgeInsets.only(left: 8, bottom: 5),
                   child: GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      context.pushNamed(
+                        'MinimalcategoryProducts',
+                        pathParameters: {
+                          'categoryId': categories.name,
+                          'itemCategory': categories.itemCategory,
+                        },
+                      );
+                    },
                     child: Container(
                       decoration: BoxDecoration(
                         color: GColors.light,

@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:clothingstore/common/widgets/product_card.dart';
 import 'package:clothingstore/features/products/presentation/bloc/product/product_cubit.dart';
 import 'package:clothingstore/features/products/presentation/bloc/product/product_state.dart';
+import 'package:clothingstore/features/products/presentation/pages/single_product/single_product_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -119,13 +120,26 @@ class MinimalStyleProductsList extends StatelessWidget {
                       ),
                       itemBuilder: (context, index) {
                         final products = state.products[index];
-                        return ProductCard(
-                          brand: products.brand!.name,
-                          image: products.thumbnail,
-                          price: products.salePrice.toString(),
-                          title: products.title,
-                          screenWidth: screenWidth,
-                          screenHeight: screenHeight * 0.3,
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder:
+                                    (context) => SingleProductsScreen(
+                                      productModel: products,
+                                    ),
+                              ),
+                            );
+                          },
+                          child: ProductCard(
+                            brand: products.brand!.name,
+                            image: products.thumbnail,
+                            price: products.salePrice.toString(),
+                            title: products.title,
+                            screenWidth: screenWidth,
+                            screenHeight: screenHeight * 0.3,
+                          ),
                         );
                       },
                     );

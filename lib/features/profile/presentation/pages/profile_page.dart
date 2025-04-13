@@ -1,5 +1,5 @@
-import 'dart:developer';
-
+import 'package:clothingstore/features/profile/presentation/bloc/UserProfilecubit/user_profile_cubit.dart';
+import 'package:clothingstore/features/profile/presentation/bloc/UserProfilecubit/user_profile_state.dart';
 import 'package:clothingstore/features/profile/presentation/pages/addresPages/pages/addres_list_page.dart';
 import 'package:clothingstore/features/profile/presentation/widgets/profile_section.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -14,7 +14,6 @@ import 'package:clothingstore/features/data/repositories/user_registeration/user
 import 'package:clothingstore/features/order/presentation/pages/orders_page.dart';
 
 import 'package:clothingstore/features/profile/presentation/pages/profile_add_update/pages/profile_data_pages.dart';
-import 'package:shimmer/shimmer.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -44,11 +43,32 @@ class ProfilePage extends StatelessWidget {
       body: Column(
         children: [
           Divider(color: GColors.gery),
-          ProfileSection(
-            phone: "",
-            userName: "",
-            screenWidth: screenWidth,
-            screenHeight: screenHeight,
+          BlocBuilder<UserProfileCubit, UserProfileState>(
+            builder: (context, state) {
+              if (state is UserProfileLoading) {
+                return ProfileSection(
+                  phone: "",
+                  userName: "",
+                  screenWidth: screenWidth,
+                  screenHeight: screenHeight,
+                );
+              } else if (state is UserProfileLoaded) {
+                return ProfileSection(
+                  phone: state.userProfile.phone,
+                  userName:
+                      "${state.userProfile.firstName} ${state.userProfile.lastName}",
+                  screenWidth: screenWidth,
+                  screenHeight: screenHeight,
+                );
+              } else {
+                return ProfileSection(
+                  phone: "",
+                  userName: "",
+                  screenWidth: screenWidth,
+                  screenHeight: screenHeight,
+                );
+              }
+            },
           ),
           Divider(color: GColors.buttonPrimary),
 
@@ -81,7 +101,6 @@ class ProfilePage extends StatelessWidget {
                         ),
                       );
                     } else if (index == 2) {
-                      
                       // Navigate to Address Book Screen
                       Navigator.push(
                         context,
@@ -153,4 +172,3 @@ class ProfilePage extends StatelessWidget {
     );
   }
 }
-
